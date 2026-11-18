@@ -86,20 +86,20 @@ export const Drawer = () => {
           {/* Header of Drawer */}
           <div className="flex items-center justify-between pb-3 border-b border-forest/60">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl overflow-hidden border border-moss/60 bg-forest flex items-center justify-center shrink-0 shadow">
+              <div className="w-9 h-9 rounded-xl overflow-hidden border border-moss/60 bg-forest flex items-center justify-center shrink-0 shadow p-0.5">
                 <img
-                  src="/assets/logo.jpg"
+                  src="/assets/got-logo.png"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/Logo Fitmate.jpg';
+                    e.target.src = '/GOT logo.png';
                   }}
-                  alt="Fitmate"
-                  className="w-full h-full object-cover"
+                  alt="GOT Logo"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <div>
                 <h2 className="font-heading font-extrabold text-base text-cream tracking-tight leading-none">
-                  fitmate
+                  got
                 </h2>
                 <p className="text-[10px] text-moss font-semibold mt-0.5">Your Gym Buddy.</p>
               </div>
@@ -120,7 +120,7 @@ export const Drawer = () => {
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="font-heading font-bold text-sm text-cream truncate">
-                {currentUser?.name || 'Atleta Fitmate'}
+                {currentUser?.name || 'Atleta GOT'}
               </h4>
               <p className="text-[11px] text-moss truncate">{currentUser?.email}</p>
               <span className="inline-block mt-0.5 text-[9px] bg-carbon px-2 py-0.5 rounded-full text-cream/75 border border-forest">
@@ -227,7 +227,7 @@ export const Drawer = () => {
           </button>
 
           <p className="text-[10px] text-center text-cream/40 pt-1">
-            fitmate v2.1 • PWA Offline-First
+            got v2.1 • PWA Offline-First
           </p>
         </div>
       </div>

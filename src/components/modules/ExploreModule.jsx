@@ -224,7 +224,7 @@ export const ExploreModule = () => {
                   <div className="bg-forest/40 p-2.5 rounded-xl border border-moss/20 flex items-start gap-2">
                     <i className="fa-solid fa-bolt text-moss text-xs mt-0.5"></i>
                     <p className="text-[11px] text-cream/90">
-                      <span className="font-bold text-moss">Tip Fitmate:</span> {ex.tip}
+                      <span className="font-bold text-moss">Tip GOT:</span> {ex.tip}
                     </p>
                   </div>
                 )}

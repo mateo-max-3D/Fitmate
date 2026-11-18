@@ -1,6 +1,6 @@
-# Fitmate - Arquitectura y Estructura de Base de Datos v2.1
+# GOT - Arquitectura y Estructura de Base de Datos v2.1
 
-Documento técnico de especificación para **fitmate: Your Gym Buddy**, aplicación móvil PWA Offline-First con PostgreSQL / Supabase.
+Documento técnico de especificación para **got: Your Gym Buddy**, aplicación móvil PWA Offline-First con PostgreSQL / Supabase.
 
 ---
 

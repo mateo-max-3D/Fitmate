@@ -9,8 +9,8 @@ export const ProfileModal = () => {
     isProfileModalOpen,
     setIsProfileModalOpen,
     setIsSyncModalOpen,
-    totalPrsCount,
     bodyMetrics,
+    personalRecords,
     showToast
   } = useFitmate();
 
@@ -27,12 +27,13 @@ export const ProfileModal = () => {
   };
 
   const initial = (currentUser?.name || currentUser?.email || 'A').charAt(0).toUpperCase();
+  const prsCount = Object.keys(personalRecords).length;
 
   return (
     <div className="fixed inset-0 bg-carbon/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
       <div className="bg-carbonCard border border-forest p-5 rounded-3xl w-full max-w-sm space-y-4 shadow-2xl">
         <div className="flex items-center justify-between">
-          <h3 className="font-heading font-extrabold text-base text-cream">Mi Perfil Fitmate</h3>
+          <h3 className="font-heading font-extrabold text-base text-cream">Mi Perfil GOT</h3>
           <button
             onClick={() => setIsProfileModalOpen(false)}
             className="w-8 h-8 rounded-full bg-carbon text-cream/70 hover:text-cream flex items-center justify-center"
@@ -48,9 +49,9 @@ export const ProfileModal = () => {
           </div>
           <div className="flex-1 min-w-0">
             <h4 className="font-heading font-bold text-sm text-cream truncate">
-              {currentUser?.name || 'Atleta Fitmate'}
+              {currentUser?.name || 'Atleta GOT'}
             </h4>
-            <p className="text-[11px] text-moss truncate">{currentUser?.email}</p>
+            <p className="text-[11px] text-moss truncate">{currentUser?.email || 'invitado@got.app'}</p>
             <span className="inline-block mt-0.5 text-[9px] bg-carbon px-2 py-0.5 rounded-full text-cream/75 border border-forest">
               {currentUser?.isGuest ? 'Modo Invitado / Local' : (config.url ? 'Supabase Cloud Sync' : 'Cuenta Local')}
             </span>
@@ -60,7 +61,7 @@ export const ProfileModal = () => {
         {/* Summary Stats */}
         <div className="grid grid-cols-3 gap-2 text-center">
           <div className="bg-carbon p-2.5 rounded-xl border border-forest">
-            <span className="block text-xs font-heading font-extrabold text-moss">{totalPrsCount}</span>
+            <span className="block text-xs font-heading font-extrabold text-moss">{prsCount}</span>
             <span className="text-[10px] text-cream/60">Récords</span>
           </div>
           <div className="bg-carbon p-2.5 rounded-xl border border-forest">

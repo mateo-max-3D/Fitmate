@@ -1,6 +1,11 @@
-# 🏋️‍♂️ fitmate - Your Gym Buddy. (v2.1)
+# 🏋️‍♂️ got - Your Gym Buddy. (v2.1)
 
 > Aplicación móvil **Progressive Web App (PWA)** Offline-First para seguimiento y análisis de rendimiento físico en el gimnasio, construida con **React**, **Tailwind CSS**, **Chart.js** y **Supabase**.
+
+---
+
+## 📸 Nuevo Logo Oficial
+La aplicación utiliza el nuevo logo oficial **`GOT logo.png`** ubicado en `public/assets/got-logo.png` y presidiendo la pantalla de bienvenida y el encabezado superior.
 
 ---
 
@@ -9,7 +14,7 @@
 * **Diseño Exclusivo para Teléfonos**: Viewport optimizado para uso táctil con una sola mano en el gimnasio.
 * **100% Funcional sin Internet**: Todo se guarda primero de forma reactiva en `LocalStorage` / `IndexedDB`, permitiendo entrenar en sótanos o zonas sin cobertura.
 * **Sincronización Automática con Supabase**: Al recuperar la conexión o configurar las credenciales, sincroniza datos de rutinas, sesiones y marcas en la nube.
-* **Navegación Global por Menú Hamburguesa (Drawer)**: Sin barras inferiores. Encabezado limpio con el logo oficial de `fitmate`, temporizador de descanso, badge de sincronización y menú lateral deslizante con acceso a los 5 módulos principales.
+* **Navegación Global por Menú Hamburguesa (Drawer)**: Sin barras inferiores. Encabezado limpio con el logo oficial de `got`, temporizador de descanso, badge de sincronización y menú lateral deslizante con acceso a los 5 módulos principales.
 
 ---
 
@@ -28,7 +33,7 @@
 ### Módulo 1: Explorador Anatómico (MuscleWiki + Creador de Ejercicios)
 * **Mapa Muscular Masculino Interactivo**: Silueta anatómica vectorial frontal y posterior. Al tocar un músculo (Pecho, Hombros, Bíceps, Tríceps, Espalda, Abdomen, Cuádriceps, Isquiotibiales, etc.), se ilumina en Verde Musgo y filtra los ejercicios.
 * **Filtros por Equipamiento**: *Todos, Barra, Mancuernas, Polea / Máquina, Peso Corporal*.
-* **Ficha de Ejercicio**: Nombre, músculos secundarios, instrucciones paso a paso, *Tip Fitmate* y botón para asignarlo a cualquiera de tus rutinas.
+* **Ficha de Ejercicio**: Nombre, músculos secundarios, instrucciones paso a paso, *Tip GOT* y botón para asignarlo a cualquiera de tus rutinas.
 * **Botón `+ Crear ejercicio`**: Modal para crear ejercicios personalizados con nombre, músculo principal, secundarios, equipamiento, instrucciones y link a video de referencia.
 
 ### Módulo 2: Gestor de Rutinas y Registro en Vivo

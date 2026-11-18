@@ -1,5 +1,5 @@
 -- ============================================================================
--- FITMATE - ESQUEMA DE BASE DE DATOS COMPLETO (POSTGRESQL / SUPABASE)
+-- GOT - ESQUEMA DE BASE DE DATOS COMPLETO (POSTGRESQL / SUPABASE)
 -- Version: 2.1 (PWA Offline-First & Drag & Drop Calendar)
 -- ============================================================================
 

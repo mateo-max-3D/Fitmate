@@ -35,20 +35,20 @@ export const Header = () => {
 
         <div className="flex items-center gap-2">
           {/* Brand Logo Thumbnail */}
-          <div className="w-9 h-9 rounded-xl overflow-hidden border border-moss/50 shadow-md shadow-moss/20 bg-forest/50 flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-xl overflow-hidden border border-moss/50 shadow-md shadow-moss/20 bg-forest/50 flex items-center justify-center shrink-0 p-0.5">
             <img
-              src="/assets/logo.jpg"
+              src="/assets/got-logo.png"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = '/Logo Fitmate.jpg';
+                e.target.src = '/GOT logo.png';
               }}
-              alt="fitmate logo"
-              className="w-full h-full object-cover"
+              alt="GOT logo"
+              className="w-full h-full object-contain"
             />
           </div>
           <div>
             <h1 className="font-heading font-extrabold text-lg tracking-tight text-cream leading-none">
-              fitmate
+              got
             </h1>
             <p className="text-[10px] text-moss font-semibold tracking-wide mt-0.5">
               Your Gym Buddy.

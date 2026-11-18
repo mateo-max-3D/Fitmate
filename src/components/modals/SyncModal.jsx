@@ -40,7 +40,7 @@ export const SyncModal = () => {
   };
 
   const copySqlSchema = () => {
-    const sql = `-- Tablas Fitmate v2.0 para Supabase
+    const sql = `-- Tablas GOT v2.1 para Supabase
 -- Podés encontrar el script completo con RLS y Triggers en database/schema.sql
 CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -104,8 +104,8 @@ CREATE TABLE IF NOT EXISTS public.body_metrics (
             <i className="fa-solid fa-wifi"></i> Funciona sin Wi-Fi en el gym
           </p>
           <p>
-            Todos tus entrenamientos y marcas se guardan localmente al instante. Cuando conectes
-            Supabase, podrás sincronizar tus datos en la nube.
+            Todos tus entrenamientos y marcas se guardan en tu teléfono de inmediato. Al conectar
+            Supabase, tus datos se respaldan en la nube.
           </p>
         </div>
 
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS public.body_metrics (
             </button>
           </div>
           <pre className="bg-carbon p-2.5 rounded-xl border border-forest text-[10px] text-cream/80 overflow-x-auto leading-relaxed font-mono">
-{`-- Tablas Fitmate v2.0
+{`-- Tablas GOT v2.1
 -- Archivo database/schema.sql contiene el script completo con Triggers y RLS
 CREATE TABLE profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id),

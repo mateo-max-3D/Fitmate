@@ -9,7 +9,7 @@ export const FitmateProvider = ({ children }) => {
   // Read saved state or start completely clean (no dummy data!)
   const loadSavedState = () => {
     try {
-      const saved = localStorage.getItem('fitmate_pwa_state_v2');
+      const saved = localStorage.getItem('got_pwa_state_v2') || localStorage.getItem('fitmate_pwa_state_v2');
       if (saved) return JSON.parse(saved);
     } catch (e) {
       console.error('Error loading local state:', e);
@@ -257,7 +257,7 @@ export const FitmateProvider = ({ children }) => {
       bodyMetrics,
       monthlyKmGoal
     };
-    localStorage.setItem('fitmate_pwa_state_v2', JSON.stringify(stateToSave));
+    localStorage.setItem('got_pwa_state_v2', JSON.stringify(stateToSave));
   }, [
     currentUser,
     currentModule,
@@ -703,3 +703,6 @@ export const FitmateProvider = ({ children }) => {
 };
 
 export const useFitmate = () => useContext(FitmateContext);
+export const useGot = useFitmate;
+export const GotProvider = FitmateProvider;
+export const GotContext = FitmateContext;

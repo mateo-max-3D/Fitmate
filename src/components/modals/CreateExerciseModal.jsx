@@ -48,7 +48,7 @@ export const CreateExerciseModal = () => {
       eqLabel: equipmentOptions.find((o) => o.id === equipment)?.label || 'Varios',
       level: 'Personalizado',
       steps: stepsArray.length > 0 ? stepsArray : ['Ejecutar con técnica estricta y rango completo.'],
-      tip: 'Ejercicio creado por vos en Fitmate. Mantené el control en la fase excéntrica.',
+      tip: 'Ejercicio creado por vos en GOT. Mantené el control en la fase excéntrica.',
       videoUrl: videoUrl.trim()
     });
 

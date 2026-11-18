@@ -1,10 +1,10 @@
 {
-  "short_name": "Fitmate",
-  "name": "Fitmate - Your Gym Buddy",
+  "short_name": "GOT",
+  "name": "GOT - Your Gym Buddy",
   "icons": [
     {
-      "src": "/assets/logo.jpg",
-      "type": "image/jpeg",
+      "src": "/assets/got-logo.png",
+      "type": "image/png",
       "sizes": "192x192 512x512"
     }
   ],

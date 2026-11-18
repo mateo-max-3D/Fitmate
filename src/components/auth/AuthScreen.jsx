@@ -38,15 +38,14 @@ export const AuthScreen = () => {
         showToast('¡Cuenta creada con éxito! 🎉');
       }
     } catch (err) {
-      // Fallback: If Supabase credentials are missing or user is offline
-      console.warn('Supabase auth failed or not configured, using local session', err);
+      console.warn('Supabase auth fallback to local session', err);
       setCurrentUser({
         id: 'local_' + Date.now(),
         email,
         name: fullName || email.split('@')[0],
         isGuest: false
       });
-      showToast(`¡Sesión iniciada (Modo Local)! Hola ${fullName || email.split('@')[0]}`);
+      showToast(`¡Sesión iniciada! Hola ${fullName || email.split('@')[0]}`);
     } finally {
       setIsLoading(false);
     }
@@ -55,8 +54,8 @@ export const AuthScreen = () => {
   const handleGuestLogin = () => {
     setCurrentUser({
       id: 'guest_' + Date.now(),
-      email: 'invitado@fitmate.app',
-      name: 'Atleta Invitado',
+      email: 'invitado@got.app',
+      name: 'Atleta GOT',
       isGuest: true
     });
     showToast('Entrando en Modo Offline / Invitado 🚀');
@@ -73,26 +72,26 @@ export const AuthScreen = () => {
           <div className="relative group">
             <div className="w-28 h-28 rounded-3xl overflow-hidden border-2 border-moss/60 brand-glow-lg bg-forest/40 flex items-center justify-center p-1.5 transition-transform duration-300 hover:scale-105">
               <img
-                src="/assets/logo.jpg"
+                src="/assets/got-logo.png"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = '/Logo Fitmate.jpg';
+                  e.target.src = '/GOT logo.png';
                 }}
-                alt="Fitmate Logo"
-                className="w-full h-full object-cover rounded-2xl"
+                alt="GOT Logo"
+                className="w-full h-full object-contain rounded-2xl"
               />
             </div>
             <span className="absolute -bottom-2 right-2 bg-moss text-carbon text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-md">
-              React + Supabase
+              v2.1 PWA
             </span>
           </div>
 
           <div>
             <h1 className="font-heading font-extrabold text-3xl tracking-tight text-cream">
-              fitmate
+              got
             </h1>
             <p className="text-xs text-moss font-semibold tracking-wide uppercase mt-0.5">
-              Your Gym Buddy
+              Your Gym Buddy.
             </p>
             <p className="text-xs text-cream/60 mt-1 max-w-xs mx-auto">
               Tu compañero inteligente para entrenar, registrar pesos y seguir tu evolución física.
@@ -198,7 +197,7 @@ export const AuthScreen = () => {
               </label>
               <button
                 type="button"
-                onClick={() => showToast('Conectá Supabase en el modal de Sync para recuperar tu clave')}
+                onClick={() => showToast('Conectá Supabase en el menú lateral para resetear tu clave')}
                 className="text-moss hover:underline"
               >
                 ¿Olvidaste tu clave?
@@ -210,7 +209,7 @@ export const AuthScreen = () => {
               disabled={isLoading}
               className="w-full bg-moss text-carbon font-heading font-extrabold py-3 rounded-2xl shadow-lg shadow-moss/20 hover:bg-moss/90 active:scale-[0.99] transition-all flex items-center justify-center gap-2 text-sm mt-2 disabled:opacity-50"
             >
-              <span>{isLoading ? 'Conectando...' : authMode === 'login' ? 'Entrar a Fitmate' : 'Crear mi cuenta'}</span>
+              <span>{isLoading ? 'Conectando...' : authMode === 'login' ? 'Entrar a GOT' : 'Crear mi cuenta en GOT'}</span>
               <i className="fa-solid fa-arrow-right text-xs"></i>
             </button>
           </form>
@@ -236,7 +235,7 @@ export const AuthScreen = () => {
       </div>
 
       <div className="text-center pt-6 pb-2 text-[11px] text-cream/50">
-        <p>Fitmate funciona sin conexión a internet y se sincroniza con Supabase en la nube.</p>
+        <p>GOT funciona sin conexión a internet y se sincroniza con Supabase en la nube.</p>
       </div>
     </div>
   );

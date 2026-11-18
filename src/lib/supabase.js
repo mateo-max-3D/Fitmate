@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 // Get configuration from env or localStorage
 const getSavedCredentials = () => {
   try {
-    const saved = localStorage.getItem('fitmate_supabase_config');
+    const saved = localStorage.getItem('got_supabase_config') || localStorage.getItem('fitmate_supabase_config');
     if (saved) {
       return JSON.parse(saved);
     }
@@ -23,7 +23,7 @@ export let supabase = (credentials.url && credentials.key)
 
 export const updateSupabaseClient = (url, key) => {
   credentials = { url: url.trim(), key: key.trim() };
-  localStorage.setItem('fitmate_supabase_config', JSON.stringify(credentials));
+  localStorage.setItem('got_supabase_config', JSON.stringify(credentials));
   if (credentials.url && credentials.key) {
     try {
       supabase = createClient(credentials.url, credentials.key);

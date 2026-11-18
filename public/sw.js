@@ -1,11 +1,11 @@
-// Fitmate PWA Service Worker (Offline-First Cache)
-const CACHE_NAME = 'fitmate-cache-v2';
+// GOT PWA Service Worker (Offline-First Cache)
+const CACHE_NAME = 'got-cache-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/assets/logo.jpg',
-  '/Logo Fitmate.jpg'
+  '/assets/got-logo.png',
+  '/GOT logo.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -29,7 +29,6 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Network first, falling back to cache
   if (event.request.method !== 'GET') return;
   event.respondWith(
     fetch(event.request)
