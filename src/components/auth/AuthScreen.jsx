@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useFitmate } from '../../context/FitmateContext';
-import { supabaseSignIn, supabaseSignUp } from '../../lib/supabase';
+import { supabase, supabaseSignIn, supabaseSignUp } from '../../lib/supabase';
 
 export const AuthScreen = () => {
   const { setCurrentUser, showToast } = useFitmate();
@@ -10,42 +10,97 @@ export const AuthScreen = () => {
   const [fullName, setFullName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [authError, setAuthError] = useState('');
+  const [authNotice, setAuthNotice] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setAuthError('');
+    setAuthNotice('');
 
     try {
       if (authMode === 'login') {
         const { data, error } = await supabaseSignIn(email, password);
         if (error) throw error;
+
+        let displayName = data.user.user_metadata?.full_name || email.split('@')[0];
+
+        // Fetch or ensure profile
+        if (supabase) {
+          try {
+            const { data: prof } = await supabase
+              .from('profiles')
+              .select('full_name')
+              .eq('id', data.user.id)
+              .maybeSingle();
+
+            if (prof?.full_name) {
+              displayName = prof.full_name;
+            } else {
+              await supabase.from('profiles').upsert({
+                id: data.user.id,
+                full_name: displayName
+              });
+            }
+          } catch (pe) {
+            console.warn('Profile read warning:', pe);
+          }
+        }
+
         setCurrentUser({
           id: data.user.id,
           email: data.user.email,
-          name: data.user.user_metadata?.full_name || email.split('@')[0],
+          name: displayName,
           isGuest: false
         });
-        showToast(`¡Bienvenido de vuelta, ${data.user.user_metadata?.full_name || 'Atleta'}!`);
+        showToast(`¡Bienvenido de vuelta, ${displayName}!`);
       } else {
         const { data, error } = await supabaseSignUp(email, password, fullName);
         if (error) throw error;
-        setCurrentUser({
-          id: data.user?.id || 'u_' + Date.now(),
-          email,
-          name: fullName || email.split('@')[0],
-          isGuest: false
-        });
-        showToast('¡Cuenta creada con éxito! 🎉');
+
+        const displayName = fullName.trim() || email.split('@')[0];
+
+        // Ensure profile is inserted into public.profiles
+        if (data?.user && supabase) {
+          try {
+            await supabase.from('profiles').upsert({
+              id: data.user.id,
+              full_name: displayName
+            });
+          } catch (pe) {
+            console.warn('Profile upsert warning:', pe);
+          }
+        }
+
+        if (data?.session) {
+          // Direct login (no email confirmation needed)
+          setCurrentUser({
+            id: data.user.id,
+            email: data.user.email,
+            name: displayName,
+            isGuest: false
+          });
+          showToast('¡Cuenta creada y sincronizada con Supabase! 🎉');
+        } else {
+          // Email confirmation required by Supabase
+          setAuthNotice('¡Cuenta registrada! Revisá tu correo para confirmar tu cuenta y luego iniciá sesión.');
+          setAuthMode('login');
+        }
       }
     } catch (err) {
-      console.warn('Supabase auth fallback to local session', err);
-      setCurrentUser({
-        id: 'local_' + Date.now(),
-        email,
-        name: fullName || email.split('@')[0],
-        isGuest: false
-      });
-      showToast(`¡Sesión iniciada! Hola ${fullName || email.split('@')[0]}`);
+      console.error('Supabase auth error:', err);
+      let msg = err.message || 'Ocurrió un error al conectar con Supabase';
+      if (msg.includes('Invalid login credentials')) {
+        msg = 'Correo o contraseña incorrectos.';
+      } else if (msg.includes('User already registered')) {
+        msg = 'Este correo ya tiene una cuenta registrada. Probá iniciar sesión.';
+      } else if (msg.includes('Password should be at least')) {
+        msg = 'La contraseña debe tener al menos 6 caracteres.';
+      } else if (msg.includes('Email not confirmed')) {
+        msg = 'Por favor confirmá tu correo electrónico antes de ingresar.';
+      }
+      setAuthError(msg);
     } finally {
       setIsLoading(false);
     }
@@ -114,6 +169,20 @@ export const AuthScreen = () => {
               Crear Cuenta
             </button>
           </div>
+
+          {authError && (
+            <div className="bg-red-950/60 border border-red-500/50 text-red-200 text-xs p-3 rounded-xl flex items-start gap-2">
+              <i className="fa-solid fa-circle-exclamation mt-0.5 text-red-400 shrink-0"></i>
+              <span>{authError}</span>
+            </div>
+          )}
+
+          {authNotice && (
+            <div className="bg-forest/60 border border-moss/50 text-moss text-xs p-3 rounded-xl flex items-start gap-2">
+              <i className="fa-solid fa-circle-info mt-0.5 text-moss shrink-0"></i>
+              <span>{authNotice}</span>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-3.5">
             {authMode === 'register' && (

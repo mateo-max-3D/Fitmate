@@ -35,6 +35,9 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://hgtfhfprszmpmcjyxkxo.supabase.co' }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhndGZoZnByc3ptcG1janl4a3hvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUwMDAxNjUsImV4cCI6MjExMDU3NjE2NX0.Y1B3a-L3pu37BROVLrhuPGrDs2uu7z_JH--kgrfJXbE' }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
