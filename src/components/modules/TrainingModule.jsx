@@ -22,7 +22,8 @@ export const TrainingModule = () => {
     customExercises,
     toggleTimer,
     isTimerRunning,
-    timerSeconds
+    timerSeconds,
+    showConfirm,
   } = useFitmate();
 
   const [isCreatingRoutine, setIsCreatingRoutine] = useState(false);
@@ -381,9 +382,14 @@ export const TrainingModule = () => {
                     </button>
                     <button
                       onClick={() => {
-                        if (confirm(`¿Eliminar la rutina "${routine.name}"?`)) {
-                          deleteRoutine(routine.id);
-                        }
+                        showConfirm({
+                          title: 'Eliminar rutina',
+                          message: `¿Querés eliminar "${routine.name}"? Esta acción no se puede deshacer.`,
+                          confirmLabel: 'Eliminar',
+                          cancelLabel: 'Cancelar',
+                          isDanger: true,
+                          onConfirm: () => deleteRoutine(routine.id),
+                        });
                       }}
                       className="w-7 h-7 rounded-lg bg-carbon hover:bg-red-950/40 text-cream/50 hover:text-red-300 flex items-center justify-center text-xs transition-all"
                       title="Eliminar rutina"

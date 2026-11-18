@@ -10,7 +10,15 @@ export const FitmateProvider = ({ children }) => {
   const loadSavedState = () => {
     try {
       const saved = localStorage.getItem('got_pwa_state_v2') || localStorage.getItem('fitmate_pwa_state_v2');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Migrate: remove hardcoded demo routines (r_empuje, r_tiron, r_piernas)
+        const DEMO_IDS = ['r_empuje', 'r_tiron', 'r_piernas'];
+        if (parsed.routines) {
+          DEMO_IDS.forEach((id) => { delete parsed.routines[id]; });
+        }
+        return parsed;
+      }
     } catch (e) {
       console.error('Error loading local state:', e);
     }
@@ -32,124 +40,8 @@ export const FitmateProvider = ({ children }) => {
   const [equipmentFilter, setEquipmentFilter] = useState('all');
   const [customExercises, setCustomExercises] = useState(initial?.customExercises || []);
 
-  // 4. Routines (User's custom routines)
-  const [routines, setRoutines] = useState(initial?.routines || {
-    r_empuje: {
-      id: 'r_empuje',
-      name: 'Empuje (Pecho, Hombro, Tríceps)',
-      description: 'Fuerza e hipertrofia de torso anterior',
-      color: '#A5C978',
-      exercises: [
-        {
-          id: 'ex_c1',
-          name: 'Press de Banca Plano',
-          muscle: 'Pecho',
-          targetSets: 4,
-          targetReps: 8,
-          lastPerformance: null, // No fake data: user will log their first!
-          sets: [
-            { reps: 8, weight: 60, done: false },
-            { reps: 8, weight: 60, done: false },
-            { reps: 8, weight: 60, done: false }
-          ]
-        },
-        {
-          id: 'ex_c2',
-          name: 'Press Inclinado con Mancuernas',
-          muscle: 'Pecho',
-          targetSets: 3,
-          targetReps: 10,
-          lastPerformance: null,
-          sets: [
-            { reps: 10, weight: 22, done: false },
-            { reps: 10, weight: 22, done: false },
-            { reps: 10, weight: 22, done: false }
-          ]
-        },
-        {
-          id: 'ex_s2',
-          name: 'Vuelos Laterales con Mancuernas',
-          muscle: 'Hombros',
-          targetSets: 3,
-          targetReps: 12,
-          lastPerformance: null,
-          sets: [
-            { reps: 12, weight: 10, done: false },
-            { reps: 12, weight: 10, done: false },
-            { reps: 12, weight: 10, done: false }
-          ]
-        }
-      ]
-    },
-    r_tiron: {
-      id: 'r_tiron',
-      name: 'Tirón (Espalda & Bíceps)',
-      description: 'Dorsales, trapecios y flexores de brazo',
-      color: '#4c754e',
-      exercises: [
-        {
-          id: 'ex_bk1',
-          name: 'Remo con Barra Pendlay / Inclinado',
-          muscle: 'Espalda',
-          targetSets: 4,
-          targetReps: 8,
-          lastPerformance: null,
-          sets: [
-            { reps: 8, weight: 50, done: false },
-            { reps: 8, weight: 50, done: false },
-            { reps: 8, weight: 50, done: false }
-          ]
-        },
-        {
-          id: 'ex_bi1',
-          name: 'Curl con Barra Recta o EZ',
-          muscle: 'Bíceps',
-          targetSets: 3,
-          targetReps: 10,
-          lastPerformance: null,
-          sets: [
-            { reps: 10, weight: 25, done: false },
-            { reps: 10, weight: 25, done: false },
-            { reps: 10, weight: 25, done: false }
-          ]
-        }
-      ]
-    },
-    r_piernas: {
-      id: 'r_piernas',
-      name: 'Piernas & Core Completo',
-      description: 'Cuádriceps, cadena posterior y abdominales',
-      color: '#648c55',
-      exercises: [
-        {
-          id: 'ex_qd1',
-          name: 'Sentadilla Libre con Barra',
-          muscle: 'Cuádriceps',
-          targetSets: 4,
-          targetReps: 6,
-          lastPerformance: null,
-          sets: [
-            { reps: 6, weight: 80, done: false },
-            { reps: 6, weight: 80, done: false },
-            { reps: 6, weight: 80, done: false }
-          ]
-        },
-        {
-          id: 'ex_hm1',
-          name: 'Peso Muerto Rumano con Barra',
-          muscle: 'Isquiotibiales',
-          targetSets: 3,
-          targetReps: 8,
-          lastPerformance: null,
-          sets: [
-            { reps: 8, weight: 70, done: false },
-            { reps: 8, weight: 70, done: false },
-            { reps: 8, weight: 70, done: false }
-          ]
-        }
-      ]
-    }
-  });
+  // 4. Routines (User's custom routines — start empty, user creates their own)
+  const [routines, setRoutines] = useState(initial?.routines || {});
 
   // 5. Active Live Workout Session (Live Tracking)
   const [activeWorkout, setActiveWorkout] = useState(initial?.activeWorkout || null);
@@ -173,6 +65,25 @@ export const FitmateProvider = ({ children }) => {
   const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
   const [isCreateExerciseModalOpen, setIsCreateExerciseModalOpen] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '' });
+
+  // In-app confirm dialog (replaces window.confirm)
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    confirmLabel: 'Confirmar',
+    cancelLabel: 'Cancelar',
+    isDanger: false,
+    onConfirm: null,
+  });
+
+  const showConfirm = ({ title, message, confirmLabel = 'Confirmar', cancelLabel = 'Cancelar', isDanger = false, onConfirm }) => {
+    setConfirmModal({ isOpen: true, title, message, confirmLabel, cancelLabel, isDanger, onConfirm });
+  };
+
+  const closeConfirm = () => {
+    setConfirmModal((prev) => ({ ...prev, isOpen: false, onConfirm: null }));
+  };
 
   const showToast = (message) => {
     setToast({ show: true, message });
@@ -694,7 +605,11 @@ export const FitmateProvider = ({ children }) => {
         isCreateExerciseModalOpen,
         setIsCreateExerciseModalOpen,
         toast,
-        showToast
+        showToast,
+        // In-app Confirm Modal
+        confirmModal,
+        showConfirm,
+        closeConfirm,
       }}
     >
       {children}
