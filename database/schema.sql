@@ -127,6 +127,7 @@ CREATE TABLE IF NOT EXISTS public.routines (
   color       TEXT          DEFAULT '#344B35',
   is_active   BOOLEAN       NOT NULL DEFAULT TRUE,
   sort_order  INT           NOT NULL DEFAULT 0,
+  exercises   JSONB         DEFAULT '[]'::jsonb,
   created_at  TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
   updated_at  TIMESTAMPTZ   NOT NULL DEFAULT NOW()
 );
@@ -299,7 +300,7 @@ CREATE TABLE IF NOT EXISTS public.body_metrics (
   calf_right_cm     NUMERIC(5,1),
   running_km        NUMERIC(6,2),
   running_min       INT,
-  satisfaction      INT         CHECK (satisfaction BETWEEN 1 AND 5),
+  satisfaction      INT         CHECK (satisfaction BETWEEN 1 AND 10),
   notes             TEXT,
   created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()

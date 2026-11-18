@@ -1,6 +1,16 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { supabase, updateSupabaseClient, getSupabaseConfig, syncBodyMetricToSupabase } from '../lib/supabase';
+import {
+  supabase,
+  generateUUID,
+  isValidUUID,
+  syncBodyMetricToSupabase,
+  fetchUserBodyMetrics,
+  syncRoutineToSupabase,
+  deleteRoutineFromSupabase,
+  fetchUserRoutines,
+  syncAllLocalDataToSupabase
+} from '../lib/supabase';
 import { MUSCLE_DATABASE } from '../data/muscleDatabase';
 
 const FitmateContext = createContext(null);
@@ -83,6 +93,61 @@ export const FitmateProvider = ({ children }) => {
   const closeConfirm = () => {
     setConfirmModal((prev) => ({ ...prev, isOpen: false, onConfirm: null }));
   };
+
+  // Supabase Auth Listener & Bidirectional Cloud Sync
+  useEffect(() => {
+    if (!supabase) return;
+
+    // Check active session on startup
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        const userObj = {
+          id: session.user.id,
+          email: session.user.email,
+          name: session.user.user_metadata?.full_name || session.user.email.split('@')[0],
+          isGuest: false
+        };
+        setCurrentUser(userObj);
+
+        // Upload any data saved locally up to Supabase immediately!
+        syncAllLocalDataToSupabase(routines, bodyMetrics, session.user.id);
+
+        // Fetch cloud data and merge
+        fetchUserRoutines(session.user.id).then((cloudRoutines) => {
+          if (cloudRoutines && Object.keys(cloudRoutines).length > 0) {
+            setRoutines((prev) => ({ ...cloudRoutines, ...prev }));
+          }
+        });
+
+        fetchUserBodyMetrics(session.user.id).then((cloudMetrics) => {
+          if (cloudMetrics && cloudMetrics.length > 0) {
+            setBodyMetrics((prev) => {
+              const combined = [...prev];
+              cloudMetrics.forEach((cm) => {
+                if (!combined.some((m) => m.id === cm.id)) combined.push(cm);
+              });
+              return combined;
+            });
+          }
+        });
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const userObj = {
+          id: session.user.id,
+          email: session.user.email,
+          name: session.user.user_metadata?.full_name || session.user.email.split('@')[0],
+          isGuest: false
+        };
+        setCurrentUser(userObj);
+        syncAllLocalDataToSupabase(routines, bodyMetrics, session.user.id);
+      }
+    });
+
+    return () => subscription?.unsubscribe();
+  }, []);
 
   const showToast = (message) => {
     setToast({ show: true, message });
@@ -215,7 +280,7 @@ export const FitmateProvider = ({ children }) => {
   // ACTIONS: ROUTINES CRUD
   // =========================================================================
   const createRoutine = (name, description = '') => {
-    const id = 'r_' + Date.now();
+    const id = generateUUID();
     const newRoutine = {
       id,
       name: name.trim(),
@@ -225,32 +290,39 @@ export const FitmateProvider = ({ children }) => {
     };
     setRoutines((prev) => ({ ...prev, [id]: newRoutine }));
     showToast(`Rutina "${name}" creada`);
+    syncRoutineToSupabase(newRoutine, currentUser?.id);
     return id;
   };
 
   const updateRoutine = (routineId, updatedData) => {
-    setRoutines((prev) => ({
-      ...prev,
-      [routineId]: { ...prev[routineId], ...updatedData }
-    }));
+    setRoutines((prev) => {
+      const updatedRoutine = { ...prev[routineId], ...updatedData };
+      syncRoutineToSupabase(updatedRoutine, currentUser?.id);
+      return {
+        ...prev,
+        [routineId]: updatedRoutine
+      };
+    });
     showToast('Rutina actualizada');
   };
 
   const duplicateRoutine = (routineId) => {
     const original = routines[routineId];
     if (!original) return;
-    const newId = 'r_' + Date.now();
+    const newId = generateUUID();
     const duplicated = {
       ...original,
       id: newId,
       name: `${original.name} (Copia)`,
       exercises: original.exercises.map((e) => ({
         ...e,
+        id: generateUUID(),
         sets: e.sets.map((s) => ({ ...s, done: false }))
       }))
     };
     setRoutines((prev) => ({ ...prev, [newId]: duplicated }));
     showToast(`Rutina duplicada`);
+    syncRoutineToSupabase(duplicated, currentUser?.id);
   };
 
   const deleteRoutine = (routineId) => {
@@ -262,6 +334,7 @@ export const FitmateProvider = ({ children }) => {
     // Remove from calendar
     setCalendarSchedules((prev) => prev.filter((s) => s.routineId !== routineId));
     showToast('Rutina eliminada');
+    deleteRoutineFromSupabase(routineId);
   };
 
   const addExerciseToRoutine = (routineId, exerciseData) => {
@@ -274,7 +347,7 @@ export const FitmateProvider = ({ children }) => {
       }
 
       const exercise = {
-        id: 're_' + Date.now(),
+        id: generateUUID(),
         name: exerciseData.name,
         muscle: exerciseData.muscleGroup || exerciseData.primaryMuscle || 'General',
         targetSets: 3,
@@ -287,15 +360,18 @@ export const FitmateProvider = ({ children }) => {
         ]
       };
 
+      const updatedRoutine = {
+        ...routine,
+        exercises: [...routine.exercises, exercise]
+      };
+
       const updated = {
         ...prev,
-        [routineId]: {
-          ...routine,
-          exercises: [...routine.exercises, exercise]
-        }
+        [routineId]: updatedRoutine
       };
 
       showToast(`¡Agregado a ${routine.name}!`);
+      syncRoutineToSupabase(updatedRoutine, currentUser?.id);
       return updated;
     });
   };
@@ -304,12 +380,14 @@ export const FitmateProvider = ({ children }) => {
     setRoutines((prev) => {
       const routine = prev[routineId];
       if (!routine) return prev;
+      const updatedRoutine = {
+        ...routine,
+        exercises: routine.exercises.filter((e) => e.id !== exerciseId)
+      };
+      syncRoutineToSupabase(updatedRoutine, currentUser?.id);
       return {
         ...prev,
-        [routineId]: {
-          ...routine,
-          exercises: routine.exercises.filter((e) => e.id !== exerciseId)
-        }
+        [routineId]: updatedRoutine
       };
     });
     showToast('Ejercicio removido de la rutina');
@@ -532,12 +610,12 @@ export const FitmateProvider = ({ children }) => {
   // =========================================================================
   const addBodyMetric = async (metricData) => {
     const entry = {
-      id: 'metric_' + Date.now(),
+      id: generateUUID(),
       ...metricData
     };
-    setBodyMetrics((prev) => [...prev, entry]);
+    setBodyMetrics((prev) => [entry, ...prev]);
     showToast('¡Marcas corporales guardadas! 🎉');
-    await syncBodyMetricToSupabase(entry);
+    await syncBodyMetricToSupabase(entry, currentUser?.id);
   };
 
   return (
