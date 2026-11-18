@@ -1,151 +1,91 @@
-# 🏋️‍♂️ Fitmate - Your Gym Buddy (v2.0)
+# 🏋️‍♂️ fitmate - Your Gym Buddy. (v2.1)
 
-> Aplicación web moderna para entrenamiento en el gimnasio, registro de cargas, seguimiento corporal bilateral y análisis de progreso, construida con **React**, **Tailwind CSS**, **Chart.js** y **Supabase**.
-
----
-
-## 📸 Identidad Visual & Captura de Pantalla
-
-Fitmate cuenta con un diseño ergonómico para uso móvil en el gimnasio con paleta oscura de alto contraste:
-* **Carbon**: `#17251F` (Fondo principal)
-* **Carbon Card**: `#1e2e28` (Tarjetas de contenido)
-* **Moss**: `#A5C978` (Acentos de energía y récord personal)
-* **Forest**: `#344B35` (Contornos y paneles secundarios)
-* **Cream**: `#F5F0E6` (Tipografía principal)
-
-El logo oficial de **Fitmate** (`Logo Fitmate.jpg` / `assets/logo.jpg`) preside la pantalla de autenticación y la barra superior de la aplicación.
+> Aplicación móvil **Progressive Web App (PWA)** Offline-First para seguimiento y análisis de rendimiento físico en el gimnasio, construida con **React**, **Tailwind CSS**, **Chart.js** y **Supabase**.
 
 ---
 
-## 🚀 Características Principales
+## 📱 Enfoque Mobile-First & PWA Offline-First
 
-### 1. 🔐 Autenticación Flexible (Supabase + Modo Offline)
-- **Supabase Auth**: Soporte para inicio de sesión y registro de cuentas seguras con email y contraseña.
-- **Modo Invitado / Offline Instantáneo**: Ingreso en 1 clic para entrenar sin demoras o cuando no hay señal WiFi en el gimnasio.
-- **Perfil de Atleta**: Modal de perfil con resumen de récords, kilómetros acumulados y controles físicos.
-
-### 2. 🗺️ Explorador Muscular Anatómico (Estilo MuscleWiki)
-- **Cuerpo Masculino Interactivo en SVG**: Vistas frontal y dorsal con giro rápido.
-- **Zonas musculares clicables**: Pecho, hombros, bíceps, tríceps, antebrazos, abdomen/core, trapecios, dorsales, lumbares, glúteos, cuádriceps, aductores, isquiotibiales y gemelos con efecto de iluminación neón Moss.
-- **Filtros por equipamiento**: Barra, Mancuernas, Poleas/Máquinas, Peso Corporal.
-- **Biblioteca técnica**: Pasos detallados y *Tip Fitmate* para cada ejercicio, con botón de 1 toque para añadirlo a la rutina activa.
-
-### 3. ⚡ Entrenar & Detección Automática de Récords (PRs)
-- **Control de Rutinas**: Selector de rutinas activas (Empuje, Tirón, Piernas) y creador de nuevas rutinas personalizadas.
-- **Tablas de Series**: Repeticiones, peso en kg y botón de serie lista.
-- **Detección Automática de Récords**: Si superás tu peso máximo anterior, la app detecta tu nuevo récord con animación de confeti y trofeo.
-- **Cronómetro de Descanso Integrado**: Al marcar una serie como completada, se inicia automáticamente el temporizador de descanso con alerta auditiva sintetizada (Web Audio API) y presets de 1m, 1m30 y 2m.
-
-### 4. 📏 Seguimiento Corporal Bilateral & Emocional
-- **Medición de Brazos por Separado**: Monitoreo de brazo izquierdo vs. derecho (cm) para detectar y corregir asimetrías.
-- **Control Mensual de Running**: Barra de progreso hacia la meta mensual de kilómetros (ej. 30 km).
-- **Control de Peso y Notas Personales**: Registro cronológico de variaciones en kg.
-- **Slider de Satisfacción (1 al 10)**: Frases motivacionales dinámicas basadas en tu nivel de satisfacción con los avances.
-
-### 5. 📊 Dashboard Analítico (Chart.js)
-- **4 Tarjetas KPI**: Peso actual vs control anterior, total de PRs, km mensuales y satisfacción.
-- **Gráfico 1**: Evolución de cargas máximas por ejercicio (Press de banca, Sentadilla, Remo).
-- **Gráfico 2**: Simetría bilateral de brazos (Izquierdo vs. Derecho).
-- **Gráfico 3**: Curva de evolución de peso corporal.
+* **Diseño Exclusivo para Teléfonos**: Viewport optimizado para uso táctil con una sola mano en el gimnasio.
+* **100% Funcional sin Internet**: Todo se guarda primero de forma reactiva en `LocalStorage` / `IndexedDB`, permitiendo entrenar en sótanos o zonas sin cobertura.
+* **Sincronización Automática con Supabase**: Al recuperar la conexión o configurar las credenciales, sincroniza datos de rutinas, sesiones y marcas en la nube.
+* **Navegación Global por Menú Hamburguesa (Drawer)**: Sin barras inferiores. Encabezado limpio con el logo oficial de `fitmate`, temporizador de descanso, badge de sincronización y menú lateral deslizante con acceso a los 5 módulos principales.
 
 ---
 
-## 🗄️ Estructura de Base de Datos (Supabase / PostgreSQL)
+## 🎨 Paleta Cromática & Identidad Visual
 
-La arquitectura de datos completa y optimizada para producción se encuentra en el directorio [`database/`](file:///c:/Users/coura/OneDrive/Desktop/Fitmate%20App/database/):
-
-1. **[`database/schema.sql`](file:///c:/Users/coura/OneDrive/Desktop/Fitmate%20App/database/schema.sql)**:
-   - Script SQL ejecutable en el editor de Supabase.
-   - 10 tablas relacionales: `profiles`, `user_settings`, `muscle_groups`, `exercises`, `routines`, `routine_exercises`, `workout_sessions`, `workout_sets`, `personal_records`, `body_metrics`, `running_logs`, `offline_sync_log`.
-   - **Triggers automáticos**:
-     - Actualización automática de `updated_at`.
-     - Hook de registro de nuevo usuario que inicializa perfil y rutinas básicas.
-     - Detección automática de Récords Personales (PRs).
-   - Políticas completas de seguridad **Row Level Security (RLS)**.
-   - Datos semilla con los 14 grupos musculares y ejercicios iniciales.
-
-2. **[`database/database_architecture.md`](file:///c:/Users/coura/OneDrive/Desktop/Fitmate%20App/database/database_architecture.md)**:
-   - Diagrama Entidad-Relación (ERD) en formato Mermaid.
-   - Diccionario de datos y justificación técnica.
+* **Fondo Principal (Carbón)**: `#17251F`
+* **Elementos Secundarios & Tarjetas (Verde Bosque)**: `#344B35` / `#1e2e28`
+* **Color Protagonista & Récords (Verde Musgo)**: `#A5C978`
+* **Textos Principales (Crema)**: `#F5F0E6`
+* **Tipografías**: `Plus Jakarta Sans` (encabezados) + `Inter` (cuerpo y números)
 
 ---
 
-## 🛠️ Instalación y Ejecución Local
+## 🚀 Los 5 Módulos Principales
 
-### Prerrequisitos
-- Node.js v18+ y npm instalados.
+### Módulo 1: Explorador Anatómico (MuscleWiki + Creador de Ejercicios)
+* **Mapa Muscular Masculino Interactivo**: Silueta anatómica vectorial frontal y posterior. Al tocar un músculo (Pecho, Hombros, Bíceps, Tríceps, Espalda, Abdomen, Cuádriceps, Isquiotibiales, etc.), se ilumina en Verde Musgo y filtra los ejercicios.
+* **Filtros por Equipamiento**: *Todos, Barra, Mancuernas, Polea / Máquina, Peso Corporal*.
+* **Ficha de Ejercicio**: Nombre, músculos secundarios, instrucciones paso a paso, *Tip Fitmate* y botón para asignarlo a cualquiera de tus rutinas.
+* **Botón `+ Crear ejercicio`**: Modal para crear ejercicios personalizados con nombre, músculo principal, secundarios, equipamiento, instrucciones y link a video de referencia.
 
-### Pasos
+### Módulo 2: Gestor de Rutinas y Registro en Vivo
+* **Constructor y Editor**: Creá, editá, duplicá o eliminá rutinas (*Empuje, Tirón, Piernas*, o las que vos definas). Agregá y quitá ejercicios fijando series y repeticiones objetivo.
+* **Registro de Sesión en Vivo (Live Workout)**:
+  * Historial de referencia (*"Última vez: 60 kg x 10"*).
+  * Carga rápida de peso (kg) y repeticiones por serie con checkbox de completado.
+  * **Detección automática de Récord Personal (PR)**: Insignia visual en Verde Musgo con *"¡Nuevo récord!"* y animación de confeti al superar tu mejor marca.
+  * **Cronómetro de descanso integrado**: Se dispara automáticamente al completar una serie, con alertas sonoras sintetizadas.
+  * Botón *"Guardemos esta sesión"* para consolidar el entrenamiento.
 
-1. Clonar el repositorio:
-   ```bash
-   git clone https://github.com/mateo-max-3D/Fitmate.git
-   cd Fitmate
-   ```
+### Módulo 3: Calendario de Planificación (Drag & Drop)
+* **Vistas Semanal y Mensual**: Adaptadas para uso táctil.
+* **Arrastrar y Soltar (Drag & Drop)**: Bandeja superior con tus rutinas. Arrastrá o tocá para agendar una rutina en cualquier día de la semana o mes.
+* **Indicadores Visuales**: Diferenciación de días planificados, completados (en Verde Musgo con check) y días de descanso.
+* Acceso directo para iniciar el entrenamiento al tocar la rutina agendada.
 
-2. Instalar dependencias:
-   ```bash
-   npm install
-   ```
+### Módulo 4: Marcas Corporales y Rendimiento Físico
+* **Peso corporal (kg)** con decimales.
+* **Medición bilateral de brazos**: Campos independientes para **Brazo Izquierdo (cm)** y **Brazo Derecho (cm)** para evaluar simetría.
+* **Control Mensual de Running**: Kilómetros acumulados en el mes con barra de progreso frente a una meta mensual editable (ej. 30 km).
+* **Slider de Satisfacción (1 al 10)**: Escala visual intuitiva con frases motivacionales dinámicas basadas en tu percepción física.
+* Historial cronológico limpio para empezar a registrar hoy mismo.
 
-3. (Opcional) Configurar Supabase:
-   Crear un archivo `.env` basado en `.env.example`:
-   ```env
-   VITE_SUPABASE_URL=https://tu-proyecto.supabase.co
-   VITE_SUPABASE_ANON_KEY=tu-anon-key
-   ```
-   *(También podés ingresar tus credenciales directamente desde el botón "Offline listo / Supabase" en la app)*.
-
-4. Iniciar el servidor de desarrollo:
-   ```bash
-   npm run dev
-   ```
-   Abrir en el navegador en `http://localhost:3000`.
-
-5. Compilar para producción:
-   ```bash
-   npm run build
-   ```
+### Módulo 5: Dashboard de Progreso y Analítica
+* **4 Tarjetas KPI**: *Sesiones del mes, Volumen total levantado (kg), Récords batidos, Km corridos este mes*.
+* **4 Gráficos Interactivos (Chart.js)**:
+  1. **Evolución de Fuerza por Ejercicio**: Curva temporal del peso máximo levantado con selector de ejercicio.
+  2. **Evolución de Peso Corporal**: Curva de tendencia ponderada en Verde Musgo.
+  3. **Comparativa de Simetría de Brazos**: Doble línea comparando Brazo Izquierdo vs. Brazo Derecho en cm.
+  4. **Running Mensual & Satisfacción**: Gráfico combinado para correlacionar kilómetros corridos con bienestar personal.
 
 ---
 
-## 📦 Estructura del Código Fuente
+## 🗄️ Base de Datos Supabase (PostgreSQL)
 
-```
-Fitmate/
-├── assets/
-│   └── logo.jpg               # Logo oficial de Fitmate
-├── public/
-│   └── assets/logo.jpg        # Archivos estáticos
-├── database/
-│   ├── schema.sql             # Esquema SQL de producción para Supabase
-│   └── database_architecture.md # Documentación del modelo de datos & ERD
-├── src/
-│   ├── components/
-│   │   ├── auth/              # Pantalla de Login / Registro con Logo
-│   │   ├── layout/            # Header, Drawer de Cronómetro y Navbar
-│   │   ├── modals/            # Modales de Perfil, Rutinas y Sync
-│   │   ├── modules/           # Módulos: Explorar, Entrenar, Cuerpo, Progreso
-│   │   ├── svg/               # AnatomicalBody SVG interactivo frente/dorso
-│   │   └── ui/                # Toast y componentes reutilizables
-│   ├── context/
-│   │   └── FitmateContext.jsx # Estado global y persistencia
-│   ├── data/
-│   │   └── muscleDatabase.js  # Catálogo anatómico y ejercicios
-│   ├── lib/
-│   │   └── supabase.js        # Cliente Supabase y utilidades offline
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-├── index.html
-├── package.json
-├── tailwind.config.js
-├── vite.config.js
-└── README.md
+El archivo [`database/schema.sql`](file:///c:/Users/coura/OneDrive/Desktop/Fitmate%20App/database/schema.sql) contiene el esquema completo listo para ejecutar en el SQL Editor de Supabase:
+* Tablas: `profiles`, `exercises`, `routines`, `routine_exercises`, `calendar_schedules`, `workout_sessions`, `workout_sets`, `personal_records`, `body_metrics`.
+* Políticas de seguridad activadas: **Row Level Security (RLS)**.
+* Datos semilla para los 14 grupos musculares anatómicos.
+
+---
+
+## 💻 Instalación y Desarrollo Local
+
+```bash
+# 1. Instalar dependencias
+npm install
+
+# 2. Iniciar servidor local
+npm run dev
+
+# 3. Compilar PWA para producción
+npm run build
 ```
 
----
-
-## 👨‍💻 Autor y Repositorio
-* **Repositorio**: [https://github.com/mateo-max-3D/Fitmate.git](https://github.com/mateo-max-3D/Fitmate.git)
-* **Desarrollado para**: Fitmate App
+El proyecto se encuentra versionado y listo en la rama `main`. Para sincronizarlo con el repositorio remoto de GitHub:
+```bash
+git push -u origin main
+```

@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFitmate } from '../../context/FitmateContext';
 import { MUSCLE_DATABASE } from '../../data/muscleDatabase';
 import { AnatomicalBody } from '../svg/AnatomicalBody';
+import { CreateExerciseModal } from '../modals/CreateExerciseModal';
+import { AssignExerciseModal } from '../modals/AssignExerciseModal';
 
 export const ExploreModule = () => {
   const {
@@ -11,20 +13,30 @@ export const ExploreModule = () => {
     setBodyView,
     equipmentFilter,
     setEquipmentFilter,
-    addExerciseToRoutine
+    customExercises,
+    setIsCreateExerciseModalOpen
   } = useFitmate();
+
+  const [assigningExercise, setAssigningExercise] = useState(null);
 
   const muscle = MUSCLE_DATABASE[selectedMuscle] || MUSCLE_DATABASE.chest;
 
+  // Combine standard exercises with custom exercises for this muscle
+  const muscleCustom = customExercises.filter(
+    (c) => c.primaryMuscle.toLowerCase() === muscle.name.toLowerCase()
+  );
+
+  const allMuscleExercises = [...muscleCustom, ...muscle.exercises];
+
   const filteredExercises = equipmentFilter === 'all'
-    ? muscle.exercises
-    : muscle.exercises.filter((ex) => ex.equipment === equipmentFilter);
+    ? allMuscleExercises
+    : allMuscleExercises.filter((ex) => ex.equipment === equipmentFilter);
 
   const equipmentOptions = [
     { id: 'all', label: 'Todos' },
     { id: 'barbell', label: 'Barra' },
     { id: 'dumbbell', label: 'Mancuernas' },
-    { id: 'cable', label: 'Polea / Máq.' },
+    { id: 'cable', label: 'Polea / Máquina' },
     { id: 'bodyweight', label: 'Peso Corporal' }
   ];
 
@@ -34,7 +46,7 @@ export const ExploreModule = () => {
       <div className="flex items-center justify-between bg-carbonCard p-3 rounded-2xl border border-forest">
         <div>
           <span className="text-[10px] font-bold uppercase tracking-wider text-moss">
-            Mapa Muscular
+            Módulo 1 • MuscleWiki
           </span>
           <h2 className="text-base font-heading font-bold text-cream leading-tight">
             ¿Qué entrenamos hoy?
@@ -66,7 +78,7 @@ export const ExploreModule = () => {
         </div>
       </div>
 
-      {/* Anatomical SVG Stage */}
+      {/* Anatomical Interactive Male Body */}
       <AnatomicalBody />
 
       {/* Quick Muscle Chips */}
@@ -94,16 +106,27 @@ export const ExploreModule = () => {
         })}
       </div>
 
-      {/* Selected Muscle Header & Equipment Filters */}
+      {/* Selected Muscle Header, Filter Bar & Create Button */}
       <div className="space-y-3">
         <div className="flex items-center justify-between px-1">
           <div>
-            <h3 className="font-heading font-extrabold text-lg text-moss">{muscle.name}</h3>
+            <div className="flex items-center gap-2">
+              <h3 className="font-heading font-extrabold text-lg text-moss">{muscle.name}</h3>
+              <span className="text-xs font-bold bg-forest text-cream px-2 py-0.5 rounded-full">
+                {filteredExercises.length}
+              </span>
+            </div>
             <p className="text-xs text-cream/70">{muscle.subtitle}</p>
           </div>
-          <span className="text-xs font-bold bg-forest text-cream px-2.5 py-1 rounded-full">
-            {filteredExercises.length} {filteredExercises.length === 1 ? 'ejercicio' : 'ejercicios'}
-          </span>
+
+          {/* Prominent "+ Crear ejercicio" Button */}
+          <button
+            onClick={() => setIsCreateExerciseModalOpen(true)}
+            className="bg-moss text-carbon font-heading font-extrabold text-xs px-3 py-2 rounded-xl shadow-md hover:bg-moss/90 active:scale-95 transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <i className="fa-solid fa-plus text-xs"></i>
+            <span>Crear ejercicio</span>
+          </button>
         </div>
 
         {/* Equipment Filter Pills */}
@@ -126,19 +149,28 @@ export const ExploreModule = () => {
           })}
         </div>
 
-        {/* Exercise Cards */}
+        {/* Exercises List */}
         <div className="space-y-3">
           {filteredExercises.length === 0 ? (
-            <div className="bg-carbonCard p-5 rounded-2xl border border-forest text-center space-y-2">
+            <div className="bg-carbonCard p-6 rounded-2xl border border-forest text-center space-y-3">
               <p className="text-xs text-cream/70">
                 No hay ejercicios con este equipamiento para {muscle.name}.
               </p>
-              <button
-                onClick={() => setEquipmentFilter('all')}
-                className="text-xs font-bold text-moss underline"
-              >
-                Ver todos los ejercicios
-              </button>
+              <div className="flex justify-center gap-2">
+                <button
+                  onClick={() => setEquipmentFilter('all')}
+                  className="text-xs font-bold text-moss underline"
+                >
+                  Ver todos los ejercicios
+                </button>
+                <span className="text-cream/40">•</span>
+                <button
+                  onClick={() => setIsCreateExerciseModalOpen(true)}
+                  className="text-xs font-bold text-moss underline"
+                >
+                  Crear uno nuevo
+                </button>
+              </div>
             </div>
           ) : (
             filteredExercises.map((ex) => (
@@ -155,13 +187,24 @@ export const ExploreModule = () => {
                       <span className="text-[10px] font-semibold bg-carbon text-cream/70 px-2 py-0.5 rounded-md border border-forest">
                         {ex.level}
                       </span>
+                      {ex.isCustom && (
+                        <span className="text-[10px] font-bold bg-moss/20 text-moss px-2 py-0.5 rounded-md border border-moss/30">
+                          Personalizado
+                        </span>
+                      )}
                     </div>
                     <h4 className="font-heading font-extrabold text-sm text-cream mt-1.5">
                       {ex.name}
                     </h4>
+                    {ex.secondaryMuscles && (
+                      <p className="text-[10px] text-cream/60 mt-0.5">
+                        Secundarios: {ex.secondaryMuscles}
+                      </p>
+                    )}
                   </div>
+
                   <button
-                    onClick={() => addExerciseToRoutine(ex.name, muscle.name)}
+                    onClick={() => setAssigningExercise(ex)}
                     className="bg-moss/20 hover:bg-moss text-moss hover:text-carbon border border-moss/40 font-bold text-[11px] px-2.5 py-1.5 rounded-xl transition-all flex items-center gap-1 shrink-0"
                   >
                     <i className="fa-solid fa-plus"></i> A mi rutina
@@ -177,17 +220,38 @@ export const ExploreModule = () => {
                   </ol>
                 </div>
 
-                <div className="bg-forest/40 p-2.5 rounded-xl border border-moss/20 flex items-start gap-2">
-                  <i className="fa-solid fa-bolt text-moss text-xs mt-0.5"></i>
-                  <p className="text-[11px] text-cream/90">
-                    <span className="font-bold text-moss">Tip Fitmate:</span> {ex.tip}
-                  </p>
-                </div>
+                {ex.tip && (
+                  <div className="bg-forest/40 p-2.5 rounded-xl border border-moss/20 flex items-start gap-2">
+                    <i className="fa-solid fa-bolt text-moss text-xs mt-0.5"></i>
+                    <p className="text-[11px] text-cream/90">
+                      <span className="font-bold text-moss">Tip Fitmate:</span> {ex.tip}
+                    </p>
+                  </div>
+                )}
+
+                {ex.videoUrl && (
+                  <a
+                    href={ex.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] text-moss font-semibold flex items-center gap-1 hover:underline"
+                  >
+                    <i className="fa-brands fa-youtube"></i> Ver video de técnica
+                  </a>
+                )}
               </div>
             ))
           )}
         </div>
       </div>
+
+      {/* Modals */}
+      <CreateExerciseModal />
+      <AssignExerciseModal
+        exercise={assigningExercise}
+        isOpen={Boolean(assigningExercise)}
+        onClose={() => setAssigningExercise(null)}
+      />
     </section>
   );
 };

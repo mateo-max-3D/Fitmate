@@ -1,0 +1,16 @@
+{
+  "short_name": "Fitmate",
+  "name": "Fitmate - Your Gym Buddy",
+  "icons": [
+    {
+      "src": "/assets/logo.jpg",
+      "type": "image/jpeg",
+      "sizes": "192x192 512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#17251F",
+  "theme_color": "#17251F",
+  "display": "standalone",
+  "orientation": "portrait"
+}
