@@ -24,10 +24,10 @@ export const Header = () => {
       <div className="flex items-center gap-2">
         <div className="w-9 h-9 rounded-xl overflow-hidden bg-black flex items-center justify-center shrink-0 p-0.5">
           <img
-            src="/assets/got-logo.png"
+            src={`${import.meta.env.BASE_URL}assets/got-logo.png`}
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = '/GOT logo.png';
+              e.target.src = `${import.meta.env.BASE_URL}GOT logo.png`;
             }}
             alt="GOT logo"
             className="w-full h-full object-contain"

@@ -63,10 +63,10 @@ export const AuthScreen = () => {
           <div className="relative group">
             <div className="w-44 h-44 rounded-3xl overflow-hidden bg-black flex items-center justify-center p-2 transition-transform duration-300 hover:scale-105">
               <img
-                src="/assets/got-logo.png"
+                src={`${import.meta.env.BASE_URL}assets/got-logo.png`}
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = '/GOT logo.png';
+                  e.target.src = `${import.meta.env.BASE_URL}GOT logo.png`;
                 }}
                 alt="GOT Logo"
                 className="w-full h-full object-contain rounded-2xl"
