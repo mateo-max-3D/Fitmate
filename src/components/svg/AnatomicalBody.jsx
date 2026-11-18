@@ -7,9 +7,8 @@ export const AnatomicalBody = () => {
 
   const handleMuscleClick = (muscleKey) => {
     setSelectedMuscle(muscleKey);
-    // If muscle belongs to opposite view, switch smoothly
     const muscleInfo = MUSCLE_DATABASE[muscleKey];
-    if (muscleInfo && muscleInfo.view !== bodyView) {
+    if (muscleInfo && muscleInfo.view !== bodyView && muscleInfo.view !== 'both') {
       setBodyView(muscleInfo.view);
     }
   };
@@ -17,229 +16,320 @@ export const AnatomicalBody = () => {
   const isZoneActive = (muscleKey) => selectedMuscle === muscleKey;
 
   return (
-    <div className="relative bg-carbonCard rounded-3xl border border-forest p-4 flex flex-col items-center justify-center shadow-inner overflow-hidden">
-      {/* Quick Rotate Floating Button */}
-      <button
-        onClick={() => setBodyView(bodyView === 'front' ? 'back' : 'front')}
-        title="Girar cuerpo"
-        className="absolute top-3 right-3 w-9 h-9 rounded-xl bg-forest/80 hover:bg-forest text-moss border border-moss/30 flex items-center justify-center shadow-md active:scale-95 transition-all z-10"
-      >
-        <i className="fa-solid fa-arrows-rotate text-sm"></i>
-      </button>
+    <div className="relative bg-black rounded-3xl border border-forest/60 p-5 flex flex-col items-center justify-center shadow-2xl overflow-hidden">
+      {/* Top Controls Bar */}
+      <div className="w-full flex items-center justify-between gap-2 mb-2 z-10">
+        {/* Selected Muscle Pill */}
+        <div className="bg-carbon/90 border border-white/20 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-md">
+          <span className="w-2.5 h-2.5 rounded-full bg-moss shadow-[0_0_8px_#A5C978]"></span>
+          <span className="text-xs font-heading font-extrabold text-white tracking-wide">
+            {MUSCLE_DATABASE[selectedMuscle]?.name || 'Seleccioná un músculo'}
+          </span>
+        </div>
 
-      {/* Selected Muscle Pill Indicator */}
-      <div className="absolute top-3 left-3 bg-carbon/90 border border-forest px-3 py-1 rounded-full flex items-center gap-1.5 z-10">
-        <span className="w-2 h-2 rounded-full bg-moss animate-pulse"></span>
-        <span className="text-xs font-heading font-bold text-cream">
-          {MUSCLE_DATABASE[selectedMuscle]?.name || 'Músculo'}
-        </span>
+        {/* View Switcher Toggle (Front / Back) */}
+        <div className="flex bg-carbon border border-white/20 p-1 rounded-2xl shadow-inner">
+          <button
+            type="button"
+            onClick={() => setBodyView('front')}
+            className={`px-3 py-1 rounded-xl text-xs font-heading font-bold transition-all ${
+              bodyView === 'front'
+                ? 'bg-moss text-carbon shadow-[0_0_10px_rgba(165,201,120,0.5)]'
+                : 'text-cream/60 hover:text-white'
+            }`}
+          >
+            Frente
+          </button>
+          <button
+            type="button"
+            onClick={() => setBodyView('back')}
+            className={`px-3 py-1 rounded-xl text-xs font-heading font-bold transition-all ${
+              bodyView === 'back'
+                ? 'bg-moss text-carbon shadow-[0_0_10px_rgba(165,201,120,0.5)]'
+                : 'text-cream/60 hover:text-white'
+            }`}
+          >
+            Espalda
+          </button>
+        </div>
       </div>
 
-      {/* FRONT VIEW SVG */}
-      <svg
-        viewBox="0 0 260 440"
-        className={`w-full max-w-[250px] h-auto mt-4 drop-shadow-xl transition-opacity duration-300 ${
-          bodyView === 'front' ? 'block' : 'hidden'
-        }`}
-      >
-        {/* Base Silhouette Front */}
-        <g className="body-silhouette">
-          <path d="M130 14 C117 14 110 24 111 38 C112 50 120 58 130 58 C140 58 148 50 149 38 C150 24 143 14 130 14 Z" />
-          <path d="M119 56 L116 74 L144 74 L141 56 Z" />
-          <path d="M46 218 L38 238 L44 244 L54 226 Z" />
-          <path d="M214 218 L222 238 L216 244 L206 226 Z" />
-          <ellipse cx="106" cy="316" rx="11" ry="9" />
-          <ellipse cx="154" cy="316" rx="11" ry="9" />
-          <path d="M97 406 L90 426 L112 426 L112 406 Z" />
-          <path d="M163 406 L170 426 L148 426 L148 406 Z" />
-        </g>
-
-        {/* Trapecios Front */}
-        <g
-          className={`muscle-zone ${isZoneActive('traps') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('traps')}
+      {/* SVG WRAPPER CONTAINER */}
+      <div className="w-full flex justify-center py-2">
+        {/* ========================================================================= */}
+        {/* 1. FRONT VIEW SVG (Matching reference image) */}
+        {/* ========================================================================= */}
+        <svg
+          viewBox="0 0 300 500"
+          className={`w-full max-w-[270px] h-auto transition-all duration-300 filter drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] ${
+            bodyView === 'front' ? 'block' : 'hidden'
+          }`}
         >
-          <path d="M116 66 L94 80 L114 82 Z" />
-          <path d="M144 66 L166 80 L146 82 Z" />
-        </g>
+          {/* Base Neutral Silhouette: Head, Neck Center, Hands, Groin, Knees, Feet */}
+          <g className="body-silhouette">
+            {/* Head & Cranium */}
+            <path d="M150 16 C136 16 128 28 128 42 C128 54 135 63 140 68 L142 76 L158 76 L160 68 C165 63 172 54 172 42 C172 28 164 16 150 16 Z" />
+            {/* Left Hand */}
+            <path d="M46 250 C40 262 36 274 34 286 C36 288 40 286 42 278 C44 284 48 286 50 280 L52 264 Z" />
+            {/* Right Hand */}
+            <path d="M254 250 C260 262 264 274 266 286 C264 288 260 286 258 278 C256 284 252 286 250 280 L248 264 Z" />
+            {/* Groin / Pelvis Cutout */}
+            <path d="M136 244 C140 270 146 292 150 292 C154 292 160 270 164 244 C158 248 142 248 136 244 Z" />
+            {/* Knees Cutouts */}
+            <path d="M116 376 C112 384 114 394 122 398 C128 394 132 386 130 376 C124 380 120 380 116 376 Z" />
+            <path d="M184 376 C188 384 186 394 178 398 C172 394 168 386 170 376 C176 380 180 380 184 376 Z" />
+            {/* Feet */}
+            <path d="M114 472 L108 492 L132 492 L130 472 Z" />
+            <path d="M186 472 L192 492 L168 492 L170 472 Z" />
+          </g>
 
-        {/* Hombros Front */}
-        <g
-          className={`muscle-zone ${isZoneActive('shoulders') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('shoulders')}
+          {/* TRAPECIOS (Front) */}
+          <g
+            className={`muscle-zone ${isZoneActive('traps') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('traps')}
+          >
+            <path d="M142 76 L124 94 C122 96 128 100 136 98 L144 76 Z" />
+            <path d="M158 76 L176 94 C178 96 172 100 164 98 L156 76 Z" />
+          </g>
+
+          {/* HOMBROS / DELTOIDES (Front) */}
+          <g
+            className={`muscle-zone ${isZoneActive('shoulders') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('shoulders')}
+          >
+            {/* Left Deltoid */}
+            <path d="M122 95 C102 98 88 116 88 134 C94 144 104 146 112 138 C118 126 124 110 122 95 Z" />
+            {/* Right Deltoid */}
+            <path d="M178 95 C198 98 212 116 212 134 C206 144 196 146 188 138 C182 126 176 110 178 95 Z" />
+          </g>
+
+          {/* PECHO / PECTORALES */}
+          <g
+            className={`muscle-zone ${isZoneActive('chest') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('chest')}
+          >
+            {/* Left Pec */}
+            <path d="M148 100 L124 98 C116 114 116 140 122 148 C132 154 146 150 148 144 Z" />
+            {/* Right Pec */}
+            <path d="M152 100 L176 98 C184 114 184 140 178 148 C168 154 154 150 152 144 Z" />
+          </g>
+
+          {/* BÍCEPS */}
+          <g
+            className={`muscle-zone ${isZoneActive('biceps') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('biceps')}
+          >
+            {/* Left Bicep */}
+            <path d="M88 136 C80 150 78 174 86 188 C94 186 102 178 104 164 C106 152 102 140 92 136 Z" />
+            {/* Right Bicep */}
+            <path d="M212 136 C220 150 222 174 214 188 C206 186 198 178 196 164 C194 152 198 140 208 136 Z" />
+          </g>
+
+          {/* ANTEBRAZOS (Front) */}
+          <g
+            className={`muscle-zone ${isZoneActive('forearms') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('forearms')}
+          >
+            {/* Left Forearm */}
+            <path d="M84 190 C72 210 60 234 50 252 L62 254 C74 238 88 214 96 192 Z" />
+            {/* Right Forearm */}
+            <path d="M216 190 C228 210 240 234 250 252 L238 254 C226 238 212 214 204 192 Z" />
+          </g>
+
+          {/* ABDOMINALES & OBLICUOS (Distinct Six-Pack + Linea Alba) */}
+          <g
+            className={`muscle-zone ${isZoneActive('abs') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('abs')}
+          >
+            {/* Top Pair */}
+            <path d="M136 154 L148 153 L148 168 L134 167 Z" />
+            <path d="M164 154 L152 153 L152 168 L166 167 Z" />
+            {/* Middle Pair */}
+            <path d="M134 171 L148 171 L148 188 L133 186 Z" />
+            <path d="M166 171 L152 171 L152 188 L167 186 Z" />
+            {/* Lower Pair */}
+            <path d="M134 191 L148 191 L148 210 L136 208 Z" />
+            <path d="M166 191 L152 191 L152 210 L164 208 Z" />
+            {/* Lower V-Taper Cutout */}
+            <path d="M138 212 L148 212 L148 240 L138 230 Z" />
+            <path d="M162 212 L152 212 L152 240 L162 230 Z" />
+            {/* Left Oblique Flank */}
+            <path d="M120 156 C114 176 114 202 122 222 C128 226 132 220 132 208 C128 190 126 172 130 158 Z" />
+            {/* Right Oblique Flank */}
+            <path d="M180 156 C186 176 186 202 178 222 C172 226 168 220 168 208 C172 190 174 172 170 158 Z" />
+          </g>
+
+          {/* White Accent Lines for Abs Definition */}
+          <g className="body-outline-line pointer-events-none">
+            <line x1="150" y1="150" x2="150" y2="242" />
+            <line x1="134" y1="170" x2="166" y2="170" />
+            <line x1="133" y1="190" x2="167" y2="190" />
+            <line x1="135" y1="211" x2="165" y2="211" />
+          </g>
+
+          {/* ADUCTORES (Inner Thigh) */}
+          <g
+            className={`muscle-zone ${isZoneActive('adductors') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('adductors')}
+          >
+            <path d="M144 288 C140 316 138 344 134 370 L140 372 C146 344 148 316 148 288 Z" />
+            <path d="M156 288 C160 316 162 344 166 370 L160 372 C154 344 152 316 152 288 Z" />
+          </g>
+
+          {/* CUÁDRICEPS */}
+          <g
+            className={`muscle-zone ${isZoneActive('quads') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('quads')}
+          >
+            {/* Left Quad */}
+            <path d="M118 238 C108 266 106 312 114 372 C120 376 128 376 132 368 C138 334 140 294 136 244 Z" />
+            {/* Right Quad */}
+            <path d="M182 238 C192 266 194 312 186 372 C180 376 172 376 168 368 C162 334 160 294 164 244 Z" />
+          </g>
+
+          {/* GEMELOS / PANTORRILLAS (Front) */}
+          <g
+            className={`muscle-zone ${isZoneActive('calves') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('calves')}
+          >
+            {/* Left Calf */}
+            <path d="M118 402 C108 424 108 448 116 470 L128 470 C132 448 132 424 126 402 Z" />
+            {/* Right Calf */}
+            <path d="M182 402 C192 424 192 448 184 470 L172 470 C168 448 168 424 174 402 Z" />
+          </g>
+        </svg>
+
+        {/* ========================================================================= */}
+        {/* 2. BACK VIEW SVG (Matching reference image) */}
+        {/* ========================================================================= */}
+        <svg
+          viewBox="0 0 300 500"
+          className={`w-full max-w-[270px] h-auto transition-all duration-300 filter drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] ${
+            bodyView === 'back' ? 'block' : 'hidden'
+          }`}
         >
-          <path d="M93 81 C78 83 71 96 72 113 C80 112 88 105 93 94 Z" />
-          <path d="M167 81 C182 83 189 96 188 113 C180 112 172 105 167 94 Z" />
-        </g>
+          {/* Base Neutral Silhouette: Head Rear, Hands, Popliteal Fossa, Feet */}
+          <g className="body-silhouette">
+            {/* Head & Neck Rear */}
+            <path d="M150 16 C136 16 128 28 128 42 C128 54 136 64 142 70 L144 76 L156 76 L158 70 C164 64 172 54 172 42 C172 28 164 16 150 16 Z" />
+            {/* Left Hand */}
+            <path d="M46 250 C40 262 36 274 34 286 C36 288 40 286 42 278 C44 284 48 286 50 280 L52 264 Z" />
+            {/* Right Hand */}
+            <path d="M254 250 C260 262 264 274 266 286 C264 288 260 286 258 278 C256 284 252 286 250 280 L248 264 Z" />
+            {/* Back of Knees (Popliteal Fossa) */}
+            <path d="M116 376 C112 384 114 394 122 398 C128 394 132 386 130 376 Z" />
+            <path d="M184 376 C188 384 186 394 178 398 C172 394 168 386 170 376 Z" />
+            {/* Feet */}
+            <path d="M114 472 L108 492 L132 492 L130 472 Z" />
+            <path d="M186 472 L192 492 L168 492 L170 472 Z" />
+          </g>
 
-        {/* Pecho */}
-        <g
-          className={`muscle-zone ${isZoneActive('chest') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('chest')}
-        >
-          <path d="M95 83 L128 86 L128 122 C114 124 98 119 93 108 C91 98 92 89 95 83 Z" />
-          <path d="M165 83 L132 86 L132 122 C146 124 162 119 167 108 C169 98 168 89 165 83 Z" />
-        </g>
+          {/* TRAPECIOS (Back Diamond / Kite) */}
+          <g
+            className={`muscle-zone ${isZoneActive('traps') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('traps')}
+          >
+            {/* Trapezius Kite from neck down spine */}
+            <path d="M144 76 L124 96 L150 148 L176 96 L156 76 Z" />
+          </g>
 
-        {/* Bíceps */}
-        <g
-          className={`muscle-zone ${isZoneActive('biceps') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('biceps')}
-        >
-          <path d="M72 115 C66 128 65 145 71 158 L84 155 C87 141 87 125 83 114 Z" />
-          <path d="M188 115 C194 128 195 145 189 158 L176 155 C173 141 173 125 177 114 Z" />
-        </g>
+          {/* DELTOIDES POSTERIOR (Rear Delts) */}
+          <g
+            className={`muscle-zone ${isZoneActive('shoulders') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('shoulders')}
+          >
+            {/* Left Rear Delt */}
+            <path d="M122 96 C102 98 88 116 88 134 C94 144 104 146 114 136 C120 124 124 108 122 96 Z" />
+            {/* Right Rear Delt */}
+            <path d="M178 96 C198 98 212 116 212 134 C206 144 196 146 186 136 C180 124 176 108 178 96 Z" />
+          </g>
 
-        {/* Antebrazos */}
-        <g
-          className={`muscle-zone ${isZoneActive('forearms') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('forearms')}
-        >
-          <path d="M69 161 C60 178 53 198 48 216 L57 219 C66 202 76 181 82 159 Z" />
-          <path d="M191 161 C200 178 207 198 212 216 L203 219 C194 202 184 181 178 159 Z" />
-        </g>
+          {/* TRÍCEPS (Horseshoe) */}
+          <g
+            className={`muscle-zone ${isZoneActive('triceps') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('triceps')}
+          >
+            {/* Left Tricep */}
+            <path d="M86 136 C78 152 78 176 86 190 C96 186 102 176 102 162 C104 150 98 138 86 136 Z" />
+            {/* Right Tricep */}
+            <path d="M214 136 C222 152 222 176 214 190 C204 186 198 176 198 162 C196 150 202 138 214 136 Z" />
+          </g>
 
-        {/* Abdomen */}
-        <g
-          className={`muscle-zone ${isZoneActive('abs') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('abs')}
-        >
-          <rect x="115" y="126" width="13" height="14" rx="3" />
-          <rect x="132" y="126" width="13" height="14" rx="3" />
-          <rect x="115" y="143" width="13" height="14" rx="3" />
-          <rect x="132" y="143" width="13" height="14" rx="3" />
-          <rect x="116" y="160" width="12" height="15" rx="3" />
-          <rect x="132" y="160" width="12" height="15" rx="3" />
-          <path d="M117 178 L128 178 L128 202 L121 196 Z" />
-          <path d="M143 178 L132 178 L132 202 L139 196 Z" />
-          <path d="M96 122 L112 127 L113 188 L99 178 C96 158 95 138 96 122 Z" />
-          <path d="M164 122 L148 127 L147 188 L161 178 C164 158 165 138 164 122 Z" />
-        </g>
+          {/* ANTEBRAZOS (Back) */}
+          <g
+            className={`muscle-zone ${isZoneActive('forearms') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('forearms')}
+          >
+            {/* Left Forearm */}
+            <path d="M84 192 C72 212 60 236 50 252 L62 254 C74 238 88 216 96 194 Z" />
+            {/* Right Forearm */}
+            <path d="M216 192 C228 212 240 236 250 252 L238 254 C226 238 212 216 204 194 Z" />
+          </g>
 
-        {/* Aductores */}
-        <g
-          className={`muscle-zone ${isZoneActive('adductors') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('adductors')}
-        >
-          <path d="M126 208 L113 216 L116 286 L125 262 Z" />
-          <path d="M134 208 L147 216 L144 286 L135 262 Z" />
-        </g>
+          {/* ESPALDA / DORSALES (Lats Wings) */}
+          <g
+            className={`muscle-zone ${isZoneActive('back') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('back')}
+          >
+            {/* Left Lat Wing */}
+            <path d="M122 108 L146 150 L146 206 L130 204 C116 182 112 144 122 108 Z" />
+            {/* Right Lat Wing */}
+            <path d="M178 108 L154 150 L154 206 L170 204 C184 182 188 144 178 108 Z" />
+          </g>
 
-        {/* Cuádriceps */}
-        <g
-          className={`muscle-zone ${isZoneActive('quads') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('quads')}
-        >
-          <path d="M97 192 L112 204 L114 302 L98 304 C89 275 88 232 97 192 Z" />
-          <path d="M163 192 L148 204 L146 302 L162 304 C171 275 172 232 163 192 Z" />
-        </g>
+          {/* ESPALDA BAJA / LUMBARES (Erector Spinae) */}
+          <g
+            className={`muscle-zone ${isZoneActive('lower_back') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('lower_back')}
+          >
+            <path d="M136 206 L148 206 L148 238 L138 236 Z" />
+            <path d="M164 206 L152 206 L152 238 L162 236 Z" />
+          </g>
 
-        {/* Gemelos Front */}
-        <g
-          className={`muscle-zone ${isZoneActive('calves') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('calves')}
-        >
-          <path d="M96 326 C89 348 91 376 98 403 L111 403 C114 376 115 348 111 326 Z" />
-          <path d="M164 326 C171 348 169 376 162 403 L149 403 C146 376 145 348 149 326 Z" />
-        </g>
-      </svg>
+          {/* GLÚTEOS (Dual Defined Buttock Spheres) */}
+          <g
+            className={`muscle-zone ${isZoneActive('glutes') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('glutes')}
+          >
+            {/* Left Glute */}
+            <path d="M148 238 C130 238 112 248 112 272 C112 296 130 306 148 304 Z" />
+            {/* Right Glute */}
+            <path d="M152 238 C170 238 188 248 188 272 C188 296 170 306 152 304 Z" />
+          </g>
 
-      {/* BACK VIEW SVG */}
-      <svg
-        viewBox="0 0 260 440"
-        className={`w-full max-w-[250px] h-auto mt-4 drop-shadow-xl transition-opacity duration-300 ${
-          bodyView === 'back' ? 'block' : 'hidden'
-        }`}
-      >
-        {/* Base Silhouette Back */}
-        <g className="body-silhouette">
-          <path d="M130 14 C117 14 110 24 111 38 C112 50 120 56 130 56 C140 56 148 50 149 38 C150 24 143 14 130 14 Z" />
-          <path d="M46 218 L38 238 L44 244 L54 226 Z" />
-          <path d="M214 218 L222 238 L216 244 L206 226 Z" />
-          <path d="M97 406 L90 426 L112 426 L112 406 Z" />
-          <path d="M163 406 L170 426 L148 426 L148 406 Z" />
-        </g>
+          {/* ISQUIOTIBIALES (Hamstrings) */}
+          <g
+            className={`muscle-zone ${isZoneActive('hamstrings') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('hamstrings')}
+          >
+            {/* Left Hamstring */}
+            <path d="M114 306 C110 330 112 354 116 374 C124 378 132 378 136 370 C144 348 146 326 146 306 Z" />
+            {/* Right Hamstring */}
+            <path d="M186 306 C190 330 188 354 184 374 C176 378 168 378 164 370 C156 348 154 326 154 306 Z" />
+          </g>
 
-        {/* Trapecios Back Diamond */}
-        <g
-          className={`muscle-zone ${isZoneActive('traps') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('traps')}
-        >
-          <path d="M119 56 L141 56 L162 82 L130 124 L98 82 Z" />
-        </g>
+          {/* GEMELOS POSTERIORES (Twin Belly Gastrocnemius) */}
+          <g
+            className={`muscle-zone ${isZoneActive('calves') ? 'active' : ''}`}
+            onClick={() => handleMuscleClick('calves')}
+          >
+            {/* Left Rear Calf Dual Lobes */}
+            <path d="M118 402 C108 424 108 448 116 470 L128 470 C132 448 134 424 126 402 Z" />
+            {/* Right Rear Calf Dual Lobes */}
+            <path d="M182 402 C192 424 192 448 184 470 L172 470 C168 448 166 424 174 402 Z" />
+          </g>
 
-        {/* Hombros Deltoides Posterior */}
-        <g
-          className={`muscle-zone ${isZoneActive('shoulders') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('shoulders')}
-        >
-          <path d="M95 82 C78 84 71 97 72 114 C81 112 89 105 95 94 Z" />
-          <path d="M165 82 C182 84 189 97 188 114 C179 112 171 105 165 94 Z" />
-        </g>
+          {/* Center Spine & Gluteal Cleft Line */}
+          <g className="body-outline-line pointer-events-none">
+            <line x1="150" y1="206" x2="150" y2="304" />
+          </g>
+        </svg>
+      </div>
 
-        {/* Espalda Dorsales */}
-        <g
-          className={`muscle-zone ${isZoneActive('back') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('back')}
-        >
-          <path d="M96 96 L128 126 L128 166 L104 162 C94 142 91 118 96 96 Z" />
-          <path d="M164 96 L132 126 L132 166 L156 162 C166 142 169 118 164 96 Z" />
-        </g>
-
-        {/* Tríceps */}
-        <g
-          className={`muscle-zone ${isZoneActive('triceps') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('triceps')}
-        >
-          <path d="M72 116 C65 130 65 147 72 160 L85 156 C89 141 88 125 83 115 Z" />
-          <path d="M188 116 C195 130 195 147 188 160 L175 156 C171 141 172 125 177 115 Z" />
-        </g>
-
-        {/* Antebrazos Back */}
-        <g
-          className={`muscle-zone ${isZoneActive('forearms') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('forearms')}
-        >
-          <path d="M69 162 C60 179 53 198 48 216 L57 219 C66 202 76 181 82 160 Z" />
-          <path d="M191 162 C200 179 207 198 212 216 L203 219 C194 202 184 181 178 160 Z" />
-        </g>
-
-        {/* Espalda Baja / Lumbares */}
-        <g
-          className={`muscle-zone ${isZoneActive('lower_back') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('lower_back')}
-        >
-          <path d="M107 166 L128 169 L128 194 L109 190 Z" />
-          <path d="M153 166 L132 169 L132 194 L151 190 Z" />
-        </g>
-
-        {/* Glúteos */}
-        <g
-          className={`muscle-zone ${isZoneActive('glutes') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('glutes')}
-        >
-          <path d="M101 193 L128 197 L128 238 C112 241 96 232 95 215 C94 205 97 198 101 193 Z" />
-          <path d="M159 193 L132 197 L132 238 C148 241 164 232 165 215 C166 205 163 198 159 193 Z" />
-        </g>
-
-        {/* Isquiotibiales */}
-        <g
-          className={`muscle-zone ${isZoneActive('hamstrings') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('hamstrings')}
-        >
-          <path d="M96 236 C108 244 120 244 127 241 L123 308 L99 306 C92 282 91 258 96 236 Z" />
-          <path d="M164 236 C152 244 140 244 133 241 L137 308 L161 306 C168 282 169 258 164 236 Z" />
-        </g>
-
-        {/* Gemelos Back */}
-        <g
-          className={`muscle-zone ${isZoneActive('calves') ? 'active' : ''}`}
-          onClick={() => handleMuscleClick('calves')}
-        >
-          <path d="M97 322 C87 346 89 374 98 403 L113 403 C118 374 119 346 114 322 Z" />
-          <path d="M163 322 C173 346 171 374 162 403 L147 403 C142 374 141 346 146 322 Z" />
-        </g>
-      </svg>
+      {/* Muscle Wiki Quick Help Footnote */}
+      <p className="text-[11px] text-cream/50 mt-1 text-center font-medium">
+        Tocá cualquier grupo muscular para filtrar sus ejercicios específicos.
+      </p>
     </div>
   );
 };
