@@ -26,36 +26,36 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   border-radius: 4px;
 }
 
-/* Interactive SVG Muscle Styling (High-Contrast Anatomical Model) */
+/* Interactive SVG Muscle Styling (Human Anatomical Model) */
 .muscle-zone {
-  fill: #737373;
+  fill: #5a5a5a;
   stroke: #ffffff;
-  stroke-width: 2;
+  stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
   cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .muscle-zone:hover {
-  fill: #949494;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.35));
+  fill: #7a7a7a;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.45));
 }
 .muscle-zone.active {
   fill: #A5C978 !important;
   stroke: #ffffff !important;
-  stroke-width: 2.4 !important;
-  filter: drop-shadow(0 0 14px rgba(165, 201, 120, 0.95)) !important;
+  stroke-width: 2.2 !important;
+  filter: drop-shadow(0 0 12px rgba(165, 201, 120, 0.9)) !important;
 }
 .body-silhouette {
-  fill: #141414;
+  fill: #1a2822;
   stroke: #ffffff;
-  stroke-width: 2;
+  stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 .body-outline-line {
   stroke: #ffffff;
-  stroke-width: 2;
+  stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
