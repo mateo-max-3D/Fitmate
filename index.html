@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>GOT - Your Gym Buddy</title>
-    <link rel="icon" type="image/png" href="./assets/got-logo.png" />
-    <link rel="apple-touch-icon" href="./assets/got-logo.png" />
+    <link rel="icon" type="image/png" href="./icon-192.png" />
+    <link rel="apple-touch-icon" href="./icon-192.png" />
     <link rel="manifest" href="./manifest.json" />
     <meta name="theme-color" content="#17251F" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -25,8 +25,15 @@
       // Register PWA Service Worker for Offline-First operation
       if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js').catch(err => {
-            console.log('SW registration skipped or error:', err);
+          const basePath = window.location.pathname.endsWith('/')
+            ? window.location.pathname
+            : window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+          const swUrl = (basePath || '/') + 'sw.js';
+          navigator.serviceWorker.register(swUrl).then(reg => {
+            console.log('GOT Service Worker registered:', reg.scope);
+          }).catch(err => {
+            console.log('SW registration fallback:', err);
+            navigator.serviceWorker.register('./sw.js').catch(() => {});
           });
         });
       }
