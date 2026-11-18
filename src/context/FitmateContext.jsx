@@ -62,7 +62,6 @@ export const FitmateProvider = ({ children }) => {
   const [isTimerDrawerOpen, setIsTimerDrawerOpen] = useState(false);
 
   // 9. Modals & Notifications
-  const [isSyncModalOpen, setIsSyncModalOpen] = useState(false);
   const [isCreateExerciseModalOpen, setIsCreateExerciseModalOpen] = useState(false);
   const [toast, setToast] = useState({ show: false, message: '' });
 
@@ -600,8 +599,6 @@ export const FitmateProvider = ({ children }) => {
         resetTimer,
         changeTimerPreset,
         // Modals & Toast
-        isSyncModalOpen,
-        setIsSyncModalOpen,
         isCreateExerciseModalOpen,
         setIsCreateExerciseModalOpen,
         toast,

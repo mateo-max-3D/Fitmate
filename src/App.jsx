@@ -9,7 +9,6 @@ import { TrainingModule } from './components/modules/TrainingModule';
 import { CalendarModule } from './components/modules/CalendarModule';
 import { BodyModule } from './components/modules/BodyModule';
 import { DashboardModule } from './components/modules/DashboardModule';
-import { SyncModal } from './components/modals/SyncModal';
 import { ConfirmModal } from './components/ui/ConfirmModal';
 
 export function App() {
@@ -35,7 +34,6 @@ export function App() {
       </main>
 
       {/* Global Modals */}
-      <SyncModal />
       <ConfirmModal
         isOpen={confirmModal.isOpen}
         title={confirmModal.title}

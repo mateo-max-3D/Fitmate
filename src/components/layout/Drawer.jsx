@@ -10,7 +10,6 @@ export const Drawer = () => {
     setCurrentModule,
     currentUser,
     setCurrentUser,
-    setIsSyncModalOpen,
     setIsTimerDrawerOpen,
     isTimerDrawerOpen,
     showToast,
@@ -205,18 +204,6 @@ export const Drawer = () => {
           >
             <i className="fa-solid fa-stopwatch text-moss"></i>
             <span>Temporizador de Descanso</span>
-          </button>
-
-          {/* Supabase config — subtle link */}
-          <button
-            onClick={() => {
-              setIsDrawerOpen(false);
-              setIsSyncModalOpen(true);
-            }}
-            className="w-full text-cream/40 hover:text-moss text-[11px] py-1.5 flex items-center justify-center gap-1.5 transition-all"
-          >
-            <i className="fa-solid fa-database text-[10px]"></i>
-            <span>Configurar Supabase</span>
           </button>
 
           <button

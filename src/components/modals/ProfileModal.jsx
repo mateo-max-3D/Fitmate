@@ -8,7 +8,6 @@ export const ProfileModal = () => {
     setCurrentUser,
     isProfileModalOpen,
     setIsProfileModalOpen,
-    setIsSyncModalOpen,
     bodyMetrics,
     personalRecords,
     showToast
@@ -76,16 +75,6 @@ export const ProfileModal = () => {
 
         {/* Actions */}
         <div className="space-y-2 pt-2 border-t border-forest/60">
-          <button
-            onClick={() => {
-              setIsProfileModalOpen(false);
-              setIsSyncModalOpen(true);
-            }}
-            className="w-full bg-forest hover:bg-forestLight text-cream text-xs font-bold py-2.5 rounded-xl border border-moss/30 flex items-center justify-center gap-2 transition-all"
-          >
-            <i className="fa-solid fa-cloud text-moss"></i>
-            <span>Configurar Supabase Cloud</span>
-          </button>
           <button
             onClick={handleLogout}
             className="w-full bg-carbon hover:bg-red-950/40 text-red-300 text-xs font-bold py-2.5 rounded-xl border border-red-900/40 flex items-center justify-center gap-2 transition-all"
