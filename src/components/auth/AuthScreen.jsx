@@ -51,15 +51,6 @@ export const AuthScreen = () => {
     }
   };
 
-  const handleGuestLogin = () => {
-    setCurrentUser({
-      id: 'guest_' + Date.now(),
-      email: 'invitado@got.app',
-      name: 'Atleta GOT',
-      isGuest: true
-    });
-    showToast('Entrando en Modo Offline / Invitado 🚀');
-  };
 
   return (
     <div className="w-full max-w-md bg-carbon min-h-screen flex flex-col justify-between p-6 relative border-x border-forest/40 z-50">
@@ -212,27 +203,11 @@ export const AuthScreen = () => {
           </form>
 
           {/* Divider */}
-          <div className="relative flex items-center justify-center my-3">
-            <div className="border-t border-forest w-full"></div>
-            <span className="bg-carbonCard px-3 text-[10px] font-bold uppercase tracking-wider text-cream/50 absolute">
-              o ingresá sin registro
-            </span>
-          </div>
-
-          {/* Guest Button */}
-          <button
-            type="button"
-            onClick={handleGuestLogin}
-            className="w-full bg-forest/80 hover:bg-forest text-cream font-heading font-bold py-2.5 rounded-2xl border border-moss/30 active:scale-[0.99] transition-all flex items-center justify-center gap-2 text-xs"
-          >
-            <i className="fa-solid fa-bolt text-moss"></i>
-            <span>Entrar como Invitado (Modo Offline)</span>
-          </button>
         </div>
       </div>
 
       <div className="text-center pt-6 pb-2 text-[11px] text-cream/50">
-        <p>GOT funciona sin conexión a internet y se sincroniza con Supabase en la nube.</p>
+        <p>GOT funciona sin conexión y sincroniza tu progreso en la nube.</p>
       </div>
     </div>
   );
