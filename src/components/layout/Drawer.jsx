@@ -86,7 +86,7 @@ export const Drawer = () => {
           {/* Header of Drawer */}
           <div className="flex items-center justify-between pb-3 border-b border-forest/60">
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl overflow-hidden border border-moss/60 bg-forest flex items-center justify-center shrink-0 shadow p-0.5">
+              <div className="w-9 h-9 rounded-xl overflow-hidden bg-black flex items-center justify-center shrink-0 shadow p-0.5">
                 <img
                   src="/assets/got-logo.png"
                   onError={(e) => {
@@ -196,17 +196,6 @@ export const Drawer = () => {
 
         {/* Drawer Bottom Actions */}
         <div className="space-y-2 pt-4 border-t border-forest/60">
-          <button
-            onClick={() => {
-              setIsDrawerOpen(false);
-              setIsSyncModalOpen(true);
-            }}
-            className="w-full bg-forest/80 hover:bg-forest text-cream text-xs font-bold py-2.5 rounded-xl border border-moss/30 flex items-center justify-center gap-2 transition-all shadow-sm"
-          >
-            <i className="fa-solid fa-database text-moss"></i>
-            <span>Supabase & Esquema SQL</span>
-          </button>
-
           <button
             onClick={() => {
               setIsDrawerOpen(false);

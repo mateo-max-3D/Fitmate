@@ -12,17 +12,17 @@ export const Header = () => {
       {/* Hamburger Button */}
       <button
         onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-        className="w-11 h-11 rounded-2xl bg-forest hover:bg-forestLight text-cream flex flex-col items-center justify-center gap-[5px] active:scale-95 transition-all shadow-md"
+        className="w-11 h-11 rounded-2xl bg-forest hover:bg-forestLight flex flex-col items-center justify-center gap-[5px] active:scale-95 transition-all shadow-md"
         title="Abrir menú"
       >
-        <span className="block w-5 h-[2px] bg-cream rounded-full"></span>
-        <span className="block w-4 h-[2px] bg-moss rounded-full"></span>
-        <span className="block w-5 h-[2px] bg-cream rounded-full"></span>
+        <span className="block w-5 h-[2px] bg-white rounded-full"></span>
+        <span className="block w-5 h-[2px] bg-white rounded-full"></span>
+        <span className="block w-5 h-[2px] bg-white rounded-full"></span>
       </button>
 
       {/* Brand Logo + Text */}
       <div className="flex items-center gap-2">
-        <div className="w-9 h-9 rounded-xl overflow-hidden bg-forest/50 flex items-center justify-center shrink-0 p-0.5">
+        <div className="w-9 h-9 rounded-xl overflow-hidden bg-black flex items-center justify-center shrink-0 p-0.5">
           <img
             src="/assets/got-logo.png"
             onError={(e) => {

@@ -70,7 +70,7 @@ export const AuthScreen = () => {
         {/* Brand & Logo Section */}
         <div className="flex flex-col items-center text-center space-y-3">
           <div className="relative group">
-            <div className="w-44 h-44 rounded-3xl overflow-hidden bg-forest/40 flex items-center justify-center p-2 transition-transform duration-300 hover:scale-105">
+            <div className="w-44 h-44 rounded-3xl overflow-hidden bg-black flex items-center justify-center p-2 transition-transform duration-300 hover:scale-105">
               <img
                 src="/assets/got-logo.png"
                 onError={(e) => {
