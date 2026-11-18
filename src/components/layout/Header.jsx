@@ -48,7 +48,7 @@ export const Header = () => {
           </div>
           <div>
             <h1 className="font-heading font-extrabold text-lg tracking-tight text-cream leading-none">
-              got
+              GOT
             </h1>
             <p className="text-[10px] text-moss font-semibold tracking-wide mt-0.5">
               Your Gym Buddy.

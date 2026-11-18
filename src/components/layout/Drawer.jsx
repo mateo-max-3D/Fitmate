@@ -99,7 +99,7 @@ export const Drawer = () => {
               </div>
               <div>
                 <h2 className="font-heading font-extrabold text-base text-cream tracking-tight leading-none">
-                  got
+                  GOT
                 </h2>
                 <p className="text-[10px] text-moss font-semibold mt-0.5">Your Gym Buddy.</p>
               </div>
@@ -227,7 +227,7 @@ export const Drawer = () => {
           </button>
 
           <p className="text-[10px] text-center text-cream/40 pt-1">
-            got v2.1 • PWA Offline-First
+            GOT • Your Gym Buddy
           </p>
         </div>
       </div>

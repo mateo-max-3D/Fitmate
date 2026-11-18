@@ -70,7 +70,7 @@ export const AuthScreen = () => {
         {/* Brand & Logo Section */}
         <div className="flex flex-col items-center text-center space-y-3">
           <div className="relative group">
-            <div className="w-28 h-28 rounded-3xl overflow-hidden border-2 border-moss/60 brand-glow-lg bg-forest/40 flex items-center justify-center p-1.5 transition-transform duration-300 hover:scale-105">
+            <div className="w-44 h-44 rounded-3xl overflow-hidden bg-forest/40 flex items-center justify-center p-2 transition-transform duration-300 hover:scale-105">
               <img
                 src="/assets/got-logo.png"
                 onError={(e) => {
@@ -81,14 +81,11 @@ export const AuthScreen = () => {
                 className="w-full h-full object-contain rounded-2xl"
               />
             </div>
-            <span className="absolute -bottom-2 right-2 bg-moss text-carbon text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-md">
-              v2.1 PWA
-            </span>
           </div>
 
           <div>
             <h1 className="font-heading font-extrabold text-3xl tracking-tight text-cream">
-              got
+              GOT
             </h1>
             <p className="text-xs text-moss font-semibold tracking-wide uppercase mt-0.5">
               Your Gym Buddy.
